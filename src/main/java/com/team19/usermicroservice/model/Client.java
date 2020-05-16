@@ -2,10 +2,19 @@ package com.team19.usermicroservice.model;
 
 import com.team19.usermicroservice.enumeration.ClientStatus;
 
+import javax.persistence.*;
+
+@Entity
+@DiscriminatorValue("CLIENT")
 public class Client extends User {
 
+    @Column(name = "phone_number", nullable = true)
     private String phoneNumber;
+
+    @Column(name = "published_ads_number", nullable = true)
     private int publishedAdsNumber;
+
+    @Enumerated(EnumType.STRING)
     private ClientStatus status;
 
     public Client() {
