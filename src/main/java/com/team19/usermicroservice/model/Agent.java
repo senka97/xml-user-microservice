@@ -1,9 +1,20 @@
 package com.team19.usermicroservice.model;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("AGENT")
 public class Agent extends User {
 
+    @Column(name = "company_name", nullable = true)
     private String companyName;
+
+    @Column(name = "company_number", nullable = true)
     private String companyNumber;
+
+    @Column(name = "address", nullable = true)
     private String address;
 
     public Agent() {
