@@ -1,10 +1,17 @@
 package com.team19.usermicroservice.controller;
 
+import com.team19.usermicroservice.dto.RegistrationRequestDTO;
 import com.team19.usermicroservice.dto.UserTokenState;
+import com.team19.usermicroservice.model.RegistrationRequest;
 import com.team19.usermicroservice.model.User;
 import com.team19.usermicroservice.security.TokenUtils;
 import com.team19.usermicroservice.security.auth.JwtAuthenticationRequest;
+import com.team19.usermicroservice.service.RegistrationRequestService;
 import com.team19.usermicroservice.service.UserService;
+import com.team19.usermicroservice.service.impl.RegistrationRequestServiceImpl;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
@@ -22,15 +29,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
@@ -48,6 +54,9 @@ public class AuthenticationController {
 
     @Autowired
     PasswordEncoder  passwordEncoder;
+
+    @Autowired
+    private RegistrationRequestServiceImpl registrationRequestService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) throws AuthenticationException, IOException {
@@ -145,5 +154,23 @@ public class AuthenticationController {
 
         SecurityContextHolder.clearContext();
     }*/
+
+    @PostMapping(value = "/registration", consumes = "application/json")
+    public ResponseEntity<?> registration(@Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {
+
+        if (!registrationRequestService.emailExist(registrationRequestDTO.getEmail())) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        RegistrationRequest registrationRequest = new RegistrationRequest(registrationRequestDTO);
+
+        if (registrationRequest != null) {
+            registrationRequestService.save(registrationRequest);
+            return new ResponseEntity<>(registrationRequestDTO, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
 
 }
