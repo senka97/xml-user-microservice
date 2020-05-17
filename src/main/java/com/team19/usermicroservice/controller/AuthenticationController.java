@@ -1,6 +1,9 @@
 package com.team19.usermicroservice.controller;
 
 import com.team19.usermicroservice.dto.UserTokenState;
+import com.team19.usermicroservice.dto.VerificationResponse;
+import com.team19.usermicroservice.model.Permission;
+import com.team19.usermicroservice.model.Role;
 import com.team19.usermicroservice.model.User;
 import com.team19.usermicroservice.security.TokenUtils;
 import com.team19.usermicroservice.security.auth.JwtAuthenticationRequest;
@@ -18,14 +21,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -145,5 +146,32 @@ public class AuthenticationController {
 
         SecurityContextHolder.clearContext();
     }*/
+
+    @RequestMapping(value = "/verifyUser", method = RequestMethod.POST)
+    public VerificationResponse verify(@RequestBody  String token){
+        System.out.println("Uslo u verifikaciju");
+        System.out.println("Token: " + token);
+        String email = tokenUtils.getEmailFromToken(token);
+        System.out.println("Email: " + email);
+        User user = userService.getUserByEmail(email);
+        String permissions = "";
+        String userID = user.getId().toString();
+        if(tokenUtils.validateToken(token,user)){
+            System.out.println("Token validan");
+            for(Role role: user.getRoles()){
+                for(Permission per: role.getPermission()){
+                    permissions += per.getName() + "|";
+                }
+            }
+            permissions = permissions.substring(0, permissions.length() - 1); //uklonim poslednju |
+            System.out.println("Permisije " + permissions);
+            VerificationResponse vr = new VerificationResponse(permissions,userID);
+            return vr;
+        }else{
+            return null;
+        }
+
+    }
+
 
 }
