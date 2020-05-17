@@ -5,4 +5,5 @@ import com.team19.usermicroservice.model.RegistrationRequest;
 public interface RegistrationRequestService {
 
     RegistrationRequest save(RegistrationRequest registrationRequest);
+    boolean emailExist(String email);
 }

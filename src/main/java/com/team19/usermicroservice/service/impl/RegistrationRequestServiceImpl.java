@@ -27,6 +27,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
         return registrationRequestRepository.save(registrationRequest);
     }
 
+    @Override
     public boolean emailExist(String email) {
         User user = userRepository.findByEmail(email);
         RegistrationRequest registrationRequest = registrationRequestRepository.findByEmail(email);
