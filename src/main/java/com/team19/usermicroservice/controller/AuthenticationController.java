@@ -66,8 +66,8 @@ public class AuthenticationController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) throws AuthenticationException, IOException {
 
         if(!checkMail(authenticationRequest.getEmail())) {
-            System.out.println("Email not valid");
-            return new ResponseEntity<>(new UserTokenState("error",0), HttpStatus.NOT_FOUND);
+            System.out.println("Invalid email");
+            return new ResponseEntity<>("Invalid email",HttpStatus.BAD_REQUEST);
         }
 
         User user = userService.getUserByEmail(authenticationRequest.getEmail());
@@ -77,13 +77,14 @@ public class AuthenticationController {
             if(org.springframework.security.crypto.bcrypt.BCrypt.checkpw(authenticationRequest.getPassword(), user.getPassword())){
                 System.out.println("Logged in successfully, email: " + user.getEmail());
             }else{
-                return new ResponseEntity<>(new UserTokenState("error", 0), HttpStatus.OK);
+                System.out.println("Invalid password");
+                return new ResponseEntity<>("Invalid password",HttpStatus.BAD_REQUEST);
             }
 
             if(!user.isEnabled())
             {
                 System.out.println("User is not activated, email: " + user.getEmail());
-                return new ResponseEntity<>(new UserTokenState("notActivated", 0), HttpStatus.OK);
+                return new ResponseEntity<>("User not activated",HttpStatus.EXPECTATION_FAILED);
             }
 
             final Authentication authentication = manager.
@@ -109,7 +110,7 @@ public class AuthenticationController {
         else
         {
             System.out.println("User not found");
-            return new ResponseEntity<>(new UserTokenState("error", 0), HttpStatus.OK);
+            return new ResponseEntity<>("User doesn't exist in the system",HttpStatus.NOT_FOUND);
 
         }
 
