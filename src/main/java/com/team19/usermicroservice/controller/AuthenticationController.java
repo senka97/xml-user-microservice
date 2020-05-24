@@ -42,6 +42,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -118,9 +119,14 @@ public class AuthenticationController {
 
     public boolean checkMail(String mail) {
 
+        if(!Pattern.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$", mail)){
+            return false;
+        }
+
         if(mail.isEmpty()) {
             return false;
         }
+        /*
         if(mail.contains(";")) {
             return false;
         }
@@ -131,7 +137,7 @@ public class AuthenticationController {
             if(Character.isWhitespace(c)) {
                 return false;
             }
-        }
+        }*/
         return true;
     }
 
