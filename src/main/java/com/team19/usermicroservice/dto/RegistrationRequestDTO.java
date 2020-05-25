@@ -26,8 +26,8 @@ public class RegistrationRequestDTO {
     private String email;
 
     @NotBlank(message="Password must not be empty.")
-    @Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}$",
-            message="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 digit and must be minimum 8 characters long")
+    @Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{10,}$",
+            message="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 digit and must be minimum 10 characters long")
     private String password;
 
     @NotBlank(message="Phone number must not be empty.")
