@@ -1,5 +1,6 @@
 package com.team19.usermicroservice.dto;
 
+import com.team19.usermicroservice.enumeration.RequestStatus;
 import com.team19.usermicroservice.model.RegistrationRequest;
 
 import javax.validation.constraints.NotBlank;
@@ -34,6 +35,8 @@ public class RegistrationRequestDTO {
     @Pattern(regexp="[0-9]{9,11}$", message="Phone number must contain only digits and must be between 9 and 11 digits")
     private String phoneNumber;
 
+    private RequestStatus status;
+
     public RegistrationRequestDTO() {
     }
 
@@ -53,6 +56,7 @@ public class RegistrationRequestDTO {
         this.email = registrationRequest.getEmail();
         this.password = registrationRequest.getPassword();
         this.phoneNumber = registrationRequest.getPhoneNumber();
+        this.status = registrationRequest.getStatus();
     }
 
     public Long getId() {
@@ -103,4 +107,11 @@ public class RegistrationRequestDTO {
         this.phoneNumber = phoneNumber;
     }
 
+    public RequestStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RequestStatus status) {
+        this.status = status;
+    }
 }
