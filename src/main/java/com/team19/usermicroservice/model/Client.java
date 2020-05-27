@@ -17,16 +17,20 @@ public class Client extends User {
     @Enumerated(EnumType.STRING)
     private ClientStatus status;
 
+    @Column(name = "removed")
+    private boolean removed;
+
     public Client() {
 
     }
 
     public Client(String name, String surname, String email, String password, String phoneNumber,
-                  int publishedAdsNumber, ClientStatus status) {
+                  int publishedAdsNumber, ClientStatus status, boolean removed) {
         super(name, surname, email, password);
         this.phoneNumber = phoneNumber;
         this.publishedAdsNumber = publishedAdsNumber;
         this.status = status;
+        this.removed = false;
     }
 
     public String getPhoneNumber() {
@@ -51,5 +55,13 @@ public class Client extends User {
 
     public void setStatus(ClientStatus status) {
         this.status = status;
+    }
+
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
     }
 }

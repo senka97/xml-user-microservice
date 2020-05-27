@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RegistrationRequestServiceImpl implements RegistrationRequestService {
 
@@ -35,5 +37,10 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<RegistrationRequest> getAllRegistrationRequest() {
+        return registrationRequestRepository.findAll();
     }
 }
