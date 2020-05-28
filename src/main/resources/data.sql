@@ -22,6 +22,10 @@ insert into permission (name) values ('getAgent');
 insert into permission (name) values ('activateClient');
 insert into permission (name) values ('blockClient');
 
+insert into permission (name) values ('cartItem_insert');
+insert into permission (name) values ('cartItem_delete');
+insert into permission (name) values ('cart_read');
+
 insert into role_permissions (role_id, permission_id) values (1, 1);
 insert into role_permissions (role_id, permission_id) values (2, 2);
 insert into role_permissions (role_id, permission_id) values (3, 3);
@@ -43,6 +47,10 @@ insert into role_permissions (role_id, permission_id) values (1, 13);
 insert into role_permissions (role_id, permission_id) values (1, 14);
 insert into role_permissions (role_id, permission_id) values (1, 15);
 insert into role_permissions (role_id, permission_id) values (1, 16);
+
+insert into role_permissions (role_id, permission_id) values (3, 17);
+insert into role_permissions (role_id, permission_id) values (3, 18);
+insert into role_permissions (role_id, permission_id) values (3, 19);
 
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('admin', 'admin', 'admintim19@gmail.com', '$2a$10$JFGdR3QqXo4X/GjBFZ0TLePLp/W80NOXSW8aMBsnUq8jTlP.Bfm/i', true, 'ADMIN', 'ROLE_ADMIN', null, null, null, null, null, null);
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('agent', 'agent', 'agenttim19@gmail.com', '$2a$10$7WJNO0.0yIbZ4Q12wY.iB.NX3.4U3LA.PNiNvMhCE.Y/MpyEPaNk.', true, 'AGENT', 'ROLE_AGENT', 'My company', '123456789', 'Alekse Santica 4', null, null, null);

@@ -126,45 +126,9 @@ public class AuthenticationController {
         if(mail.isEmpty()) {
             return false;
         }
-        /*
-        if(mail.contains(";")) {
-            return false;
-        }
-        if(mail.contains(",")) {
-            return false;
-        }
-        for(Character c:mail.toCharArray()) {
-            if(Character.isWhitespace(c)) {
-                return false;
-            }
-        }*/
+
         return true;
     }
-
-    /*@PreAuthorize("hasAuthority('loginAgent') or hasAuthority('loginAdmin') or hasAuthority('loginClient')")
-    @RequestMapping(value="/logout", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void logOutUser(@Context HttpServletRequest request){
-
-        System.out.println("Logout u auth-service");
-        String token = tokenUtils.getToken(request);
-        String email = tokenUtils.getUsernameFromToken(token);
-        User user = (User) this.userService.getUserByEmail(email);
-
-
-        if(user.getRole().equals("ROLE_AGENT"))
-        {
-            System.out.println("Agent bio ulogovan");
-            restTemplate.getForEntity("http://agent/agentSecurity/logout", void.class);
-
-        }else
-        {
-            System.out.println("Admin ili klijent bio ulogovan");
-            restTemplate.getForEntity("http://MegaTravel-XML/api/mainSecurity/logout", void.class);
-
-        }
-
-        SecurityContextHolder.clearContext();
-    }*/
 
 
     @RequestMapping(value = "/verifyUser", method = RequestMethod.POST)
