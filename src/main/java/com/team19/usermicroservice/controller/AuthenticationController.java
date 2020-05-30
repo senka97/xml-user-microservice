@@ -1,46 +1,33 @@
 package com.team19.usermicroservice.controller;
 
+import com.team19.usermicroservice.dto.RegistrationRequestAgentDTO;
 import com.team19.usermicroservice.dto.RegistrationRequestDTO;
 import com.team19.usermicroservice.dto.UserTokenState;
 import com.team19.usermicroservice.dto.VerificationResponse;
-import com.team19.usermicroservice.model.Permission;
-import com.team19.usermicroservice.model.Role;
-import com.team19.usermicroservice.model.RegistrationRequest;
-import com.team19.usermicroservice.model.User;
+import com.team19.usermicroservice.model.*;
 import com.team19.usermicroservice.security.TokenUtils;
 import com.team19.usermicroservice.security.auth.JwtAuthenticationRequest;
-import com.team19.usermicroservice.service.RegistrationRequestService;
 import com.team19.usermicroservice.service.UserService;
+import com.team19.usermicroservice.service.impl.RegistrationRequestAgentServiceImpl;
 import com.team19.usermicroservice.service.impl.RegistrationRequestServiceImpl;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import com.team19.usermicroservice.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -62,6 +49,12 @@ public class AuthenticationController {
 
     @Autowired
     private RegistrationRequestServiceImpl registrationRequestService;
+
+    @Autowired
+    private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private RegistrationRequestAgentServiceImpl registrationRequestAgentService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) throws AuthenticationException, IOException {
@@ -160,7 +153,7 @@ public class AuthenticationController {
     @PostMapping(value = "/registration", consumes = "application/json")
     public ResponseEntity<?> registration(@Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {
 
-        if (!registrationRequestService.emailExist(registrationRequestDTO.getEmail())) {
+        if (!userServiceImpl.emailExist(registrationRequestDTO.getEmail())) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -169,6 +162,24 @@ public class AuthenticationController {
         if (registrationRequest != null) {
             registrationRequestService.save(registrationRequest);
             return new ResponseEntity<>(registrationRequestDTO, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @PostMapping(value = "/registration/agent", consumes = "application/json")
+    public ResponseEntity<?> registrationAgent(@Valid @RequestBody RegistrationRequestAgentDTO registrationRequestAgentDTO) {
+
+        if (!userServiceImpl.emailExist(registrationRequestAgentDTO.getEmail())) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        RegistrationRequestAgent registrationRequestAgent = new RegistrationRequestAgent(registrationRequestAgentDTO);
+
+        if (registrationRequestAgent != null) {
+            registrationRequestAgentService.save(registrationRequestAgent);
+            return new ResponseEntity<>(registrationRequestAgentDTO, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

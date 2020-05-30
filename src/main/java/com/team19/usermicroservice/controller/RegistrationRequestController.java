@@ -24,11 +24,11 @@ public class RegistrationRequestController {
     @Autowired
     private RegistrationRequestServiceImpl registrationRequestService;
 
-    @GetMapping(produces = "application/json")
+    @GetMapping
     @PreAuthorize("hasAuthority('allRegistrationRequests')")
-    public ResponseEntity<List<RegistrationRequestDTO>> getAllRegistrationRequest() {
+    public ResponseEntity<List<RegistrationRequestDTO>> getAllRegistrationRequests() {
 
-        List<RegistrationRequest> registrationRequests = registrationRequestService.getAllRegistrationRequest();
+        List<RegistrationRequest> registrationRequests = registrationRequestService.getAllRegistrationRequests();
         List<RegistrationRequestDTO> registrationRequestDTOS = new ArrayList<>();
 
         for (RegistrationRequest registrationRequest : registrationRequests) {

@@ -7,6 +7,5 @@ import java.util.List;
 public interface RegistrationRequestService {
 
     RegistrationRequest save(RegistrationRequest registrationRequest);
-    boolean emailExist(String email);
-    List<RegistrationRequest> getAllRegistrationRequest();
+    List<RegistrationRequest> getAllRegistrationRequests();
 }
