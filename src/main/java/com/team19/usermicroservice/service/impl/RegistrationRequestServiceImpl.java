@@ -1,7 +1,9 @@
 package com.team19.usermicroservice.service.impl;
 
 import com.team19.usermicroservice.model.RegistrationRequest;
+import com.team19.usermicroservice.model.RegistrationRequestAgent;
 import com.team19.usermicroservice.model.User;
+import com.team19.usermicroservice.repository.RegistrationRequestAgentRepository;
 import com.team19.usermicroservice.repository.RegistrationRequestRepository;
 import com.team19.usermicroservice.repository.UserRepository;
 import com.team19.usermicroservice.service.RegistrationRequestService;
@@ -20,27 +22,15 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
     @Autowired
     private RegistrationRequestRepository registrationRequestRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Override
     public RegistrationRequest save(RegistrationRequest registrationRequest) {
         registrationRequest.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
         return registrationRequestRepository.save(registrationRequest);
     }
 
-    @Override
-    public boolean emailExist(String email) {
-        User user = userRepository.findByEmail(email);
-        RegistrationRequest registrationRequest = registrationRequestRepository.findByEmail(email);
-        if (user != null || registrationRequest != null) {
-            return false;
-        }
-        return true;
-    }
 
     @Override
-    public List<RegistrationRequest> getAllRegistrationRequest() {
+    public List<RegistrationRequest> getAllRegistrationRequests() {
         return registrationRequestRepository.findAll();
     }
 }

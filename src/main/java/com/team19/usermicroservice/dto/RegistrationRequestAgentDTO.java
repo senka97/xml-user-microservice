@@ -3,16 +3,48 @@ package com.team19.usermicroservice.dto;
 import com.team19.usermicroservice.enumeration.RequestStatus;
 import com.team19.usermicroservice.model.RegistrationRequestAgent;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class RegistrationRequestAgentDTO {
 
     private Long id;
+
+    @NotBlank(message="Name must not be empty.")
+    @Size(min=2, max=20, message = "Name must be from 2 to 20 characters long.")
+    @Pattern(regexp="[a-zA-Z ]+$", message="Name must not include special characters and numbers.")
     private String name;
+
+    @NotBlank(message="Surname must not be empty.")
+    @Size(min=2, max=20, message = "Surname must be from 2 to 20 characters long.")
+    @Pattern(regexp="[a-zA-Z ]+$", message="Surname must not include special characters and numbers.")
     private String surname;
+
+    @NotBlank(message="Email must not be empty.")
+    @Pattern(regexp="^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$",
+            message="Email must contain only letters and numbers.")
     private String email;
+
+    @NotBlank(message="Password must not be empty.")
+    @Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{10,}$",
+            message="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 digit and must be minimum 10 characters long")
     private String password;
+
+    @NotBlank(message="Company name must not be empty.")
+    @Size(min=2, max=20, message = "Company name must be from 2 to 20 characters long.")
+    @Pattern(regexp="^[a-zA-Z0-9_ ]*$", message="Company name must not include special characters.")
     private String companyName;
+
+    @NotBlank(message="Company number must not be empty.")
+    @Pattern(regexp="[0-9]{9,11}$", message="Company number must contain only digits and must be between 9 and 11 digits")
     private String companyNumber;
+
+    @NotBlank(message="Company address must not be empty.")
+    @Size(min=2, max=20, message = "Company address must be from 2 to 20 characters long.")
+    @Pattern(regexp="^[a-zA-Z0-9_ ]*$", message="Company name must not include special characters.")
     private String address;
+
     private RequestStatus status;
 
     public RegistrationRequestAgentDTO() {

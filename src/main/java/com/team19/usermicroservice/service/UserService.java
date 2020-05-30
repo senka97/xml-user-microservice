@@ -9,4 +9,5 @@ public interface UserService {
 
     User getUserByEmail(String username);
     ArrayList<CommentDTO> getCommentCreator(ArrayList<CommentDTO> comments);
+    boolean emailExist(String email);
 }
