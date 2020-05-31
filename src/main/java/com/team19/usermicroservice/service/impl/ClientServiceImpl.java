@@ -1,6 +1,8 @@
 package com.team19.usermicroservice.service.impl;
 
 import com.team19.usermicroservice.client.AdClient;
+import com.team19.usermicroservice.dto.ClientDTO;
+import com.team19.usermicroservice.dto.ClientFrontDTO;
 import com.team19.usermicroservice.enumeration.ClientStatus;
 import com.team19.usermicroservice.model.Client;
 import com.team19.usermicroservice.model.Permission;
@@ -123,5 +125,19 @@ public class ClientServiceImpl implements ClientService {
         }
 
         return null;
+    }
+
+    @Override
+    public List<ClientFrontDTO> fillClientsInformation(List<ClientFrontDTO> clientFrontDTOs) {
+
+        for(ClientFrontDTO c: clientFrontDTOs){
+            Client client = clientRepository.findById(c.getId()).orElse(null);
+            if(client != null){
+                c.setName(client.getName());
+                c.setSurname(client.getSurname());
+                c.setEmail(client.getEmail());
+            }
+        }
+        return clientFrontDTOs;
     }
 }

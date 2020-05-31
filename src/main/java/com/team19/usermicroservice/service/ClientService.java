@@ -1,5 +1,6 @@
 package com.team19.usermicroservice.service;
 
+import com.team19.usermicroservice.dto.ClientFrontDTO;
 import com.team19.usermicroservice.model.Client;
 
 import java.util.List;
@@ -12,5 +13,6 @@ public interface ClientService {
     void removeClient(Long id);
     Client activateClient(Long id);
     Client blockClient(Long id);
+    List<ClientFrontDTO> fillClientsInformation(List<ClientFrontDTO> clientDrontDTOs);
 
 }
