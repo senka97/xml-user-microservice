@@ -44,9 +44,15 @@ insert into permission (name) values ('ad_read');
 insert into permission (name) values ('ad_create');
 insert into permission (name) values ('ad_update');
 
-insert into permission (name) values ('request_insert');
+insert into permission (name) values ('request_create');
 
 insert into permission (name) values ('allRegistrationRequestsAgent');
+
+insert into permission (name) values ('fillClient');
+insert into permission (name) values ('request_update');
+insert into permission (name) values ('request_read');
+insert into permission (name) values ('request_update_cancel');
+
 
 insert into role_permissions (role_id, permission_id) values (1, 1);
 insert into role_permissions (role_id, permission_id) values (2, 2);
@@ -103,6 +109,15 @@ insert into role_permissions (role_id, permission_id) values (3, 35);-- client r
 insert into role_permissions (role_id, permission_id) values (3, 36);
 
 insert into role_permissions (role_id, permission_id) values (1, 37);
+
+insert into role_permissions (role_id, permission_id) values (2, 38);
+insert into role_permissions (role_id, permission_id) values (3, 38);
+insert into role_permissions (role_id, permission_id) values (2, 39);
+insert into role_permissions (role_id, permission_id) values (3, 39);
+insert into role_permissions (role_id, permission_id) values (2, 40);
+insert into role_permissions (role_id, permission_id) values (3, 40);
+insert into role_permissions (role_id, permission_id) values (3, 41);
+
 
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('admin', 'admin', 'admin@gmail.com', '$2a$10$aMBAEXjwqcavdNT373EM7.hlk2MWp1SNYCZ5NWk/Dytyf/xPsI02a', true, 'ADMIN', 'ROLE_ADMIN', null, null, null, null, null, null);
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('agent', 'agent', 'agent@gmail.com', '$2a$10$7YXN6idLLmf5Gy2K5guobOghxYVQBcc9a04fFmRd82ns12klLCmr.', true, 'AGENT', 'ROLE_AGENT', 'My company', '123456789', 'Alekse Santica 4', null, null, null);

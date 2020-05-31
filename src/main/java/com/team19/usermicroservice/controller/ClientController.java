@@ -1,6 +1,7 @@
 package com.team19.usermicroservice.controller;
 
 import com.team19.usermicroservice.dto.ClientDTO;
+import com.team19.usermicroservice.dto.ClientFrontDTO;
 import com.team19.usermicroservice.model.Client;
 import com.team19.usermicroservice.service.impl.ClientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,4 +95,13 @@ public class ClientController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping(value="/fill")
+    @PreAuthorize("hasAuthority('fillClient')")
+    public List<ClientFrontDTO> fillClientsInformation(@RequestBody List<ClientFrontDTO> clientFrontDTOs){
+
+        return this.clientService.fillClientsInformation(clientFrontDTOs);
+    }
+
+
 }
