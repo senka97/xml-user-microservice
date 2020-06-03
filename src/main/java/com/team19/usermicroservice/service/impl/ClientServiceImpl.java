@@ -1,6 +1,7 @@
 package com.team19.usermicroservice.service.impl;
 
 import com.team19.usermicroservice.client.AdClient;
+import com.team19.usermicroservice.client.CarClient;
 import com.team19.usermicroservice.dto.ClientDTO;
 import com.team19.usermicroservice.dto.ClientFrontDTO;
 import com.team19.usermicroservice.enumeration.ClientStatus;
@@ -30,6 +31,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private AdClient adClient;
+
+    @Autowired
+    private CarClient carClient;
 
     @Override
     public List<Client> getAllClients() {
@@ -66,9 +70,20 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void removeClient(Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TokenBasedAuthentication tokenBasedAuthentication = (TokenBasedAuthentication) auth;
+        User user = (User) tokenBasedAuthentication.getPrincipal();
+        String userID = user.getId().toString();
+        String token = tokenBasedAuthentication.getToken();
+        String permissions = getPermissions(user);
+
         Client client = clientRepository.getOne(id);
         client.setRemoved(true);
         client.setStatus(ClientStatus.INACTIVE);
+        client.setEnabled(false);
+
+        adClient.hideAdsForBlockedClient(id, permissions, userID, token);
+        carClient.hideCommentRequestsForBlockedAndRemovedClient(id, permissions, userID, token);
         clientRepository.save(client);
     }
 
@@ -96,13 +111,10 @@ public class ClientServiceImpl implements ClientService {
         client.setStatus(ClientStatus.ACTIVE);
         client.setEnabled(true);
 
-        ResponseEntity<?> responseEntity = adClient.showAdsForActiveClient(id, permissions, userID, token);
-        if(responseEntity.getStatusCode().equals(HttpStatus.OK)) {
-            clientRepository.save(client);
-            return client;
-        }
+        adClient.showAdsForActiveClient(id, permissions, userID, token);
+        clientRepository.save(client);
+        return client;
 
-        return null;
     }
 
     @Override
@@ -118,13 +130,11 @@ public class ClientServiceImpl implements ClientService {
         client.setStatus(ClientStatus.BLOCKED);
         client.setEnabled(false);
 
-        ResponseEntity<?> responseEntity = adClient.hideAdsForBlockedClient(id, permissions, userID, token);
-        if(responseEntity.getStatusCode().equals(HttpStatus.OK)) {
-            clientRepository.save(client);
-            return client;
-        }
+        adClient.hideAdsForBlockedClient(id, permissions, userID, token);
+        carClient.hideCommentRequestsForBlockedAndRemovedClient(id, permissions, userID, token);
+        clientRepository.save(client);
+        return client;
 
-        return null;
     }
 
     @Override
