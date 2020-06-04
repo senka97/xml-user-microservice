@@ -2,6 +2,7 @@ package com.team19.usermicroservice.service.impl;
 
 import com.team19.usermicroservice.client.AdClient;
 import com.team19.usermicroservice.client.CarClient;
+import com.team19.usermicroservice.client.RentClient;
 import com.team19.usermicroservice.dto.ClientDTO;
 import com.team19.usermicroservice.dto.ClientFrontDTO;
 import com.team19.usermicroservice.enumeration.ClientStatus;
@@ -34,6 +35,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private CarClient carClient;
+
+    @Autowired
+    private RentClient rentClient;
 
     @Override
     public List<Client> getAllClients() {
@@ -84,6 +88,7 @@ public class ClientServiceImpl implements ClientService {
 
         adClient.hideAdsForBlockedClient(id, permissions, userID, token);
         carClient.hideCommentRequestsForBlockedAndRemovedClient(id, permissions, userID, token);
+        rentClient.rejectAllPendingRequestForBlockedOrRemovedClient(id, permissions, userID, token);
         clientRepository.save(client);
     }
 
@@ -132,6 +137,7 @@ public class ClientServiceImpl implements ClientService {
 
         adClient.hideAdsForBlockedClient(id, permissions, userID, token);
         carClient.hideCommentRequestsForBlockedAndRemovedClient(id, permissions, userID, token);
+        rentClient.rejectAllPendingRequestForBlockedOrRemovedClient(id, permissions, userID, token);
         clientRepository.save(client);
         return client;
 
