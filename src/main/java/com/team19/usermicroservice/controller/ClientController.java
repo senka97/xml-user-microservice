@@ -74,7 +74,7 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value = "/activate/{id}")
+    @PutMapping(value = "/{id}/activate")
     @PreAuthorize("hasAuthority('activateClient')")
     public ResponseEntity<ClientDTO> activateClient(@PathVariable Long id) {
         Client client = clientService.activateClient(id);
@@ -85,7 +85,7 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping(value = "/block/{id}")
+    @PutMapping(value = "/{id}/block")
     @PreAuthorize("hasAuthority('blockClient')")
     public ResponseEntity<ClientDTO> blockClient(@PathVariable Long id) {
         Client client = clientService.blockClient(id);

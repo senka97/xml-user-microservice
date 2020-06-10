@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "rent-service")
 public interface RentClient {
 
-    @PutMapping(value = "/api/request/reject/client/{id}")
+    @PutMapping(value = "/api/request/client/{id}")
     ResponseEntity<?> rejectAllPendingRequestForBlockedOrRemovedClient(@PathVariable("id") Long id,
                                                                        @RequestHeader("permissions") String permissions,
                                                                        @RequestHeader("userID") String userId,
