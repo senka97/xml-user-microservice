@@ -58,6 +58,10 @@ insert into permission (name) values ('allReplies');
 insert into permission (name) values ('reply_update');
 insert into permission (name) values ('request_reject_update');
 
+insert into permission (name) values ('rate_update');
+insert into permission (name) values ('user_can_rate');
+--insert into permission (name) values ('rating_status');
+
 insert into role_permissions (role_id, permission_id) values (1, 1);
 insert into role_permissions (role_id, permission_id) values (2, 2);
 insert into role_permissions (role_id, permission_id) values (3, 3);
@@ -127,6 +131,9 @@ insert into role_permissions (role_id, permission_id) values (1, 43);
 insert into role_permissions (role_id, permission_id) values (1, 44);
 insert into role_permissions (role_id, permission_id) values (1, 45);
 
+insert into role_permissions (role_id, permission_id) values (3, 46);
+insert into role_permissions (role_id, permission_id) values (3, 47);
+--insert into role_permissions (role_id, permission_id) values (3, 48);
 
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('Admin', 'Admin', 'admin@gmail.com', '$2a$10$aMBAEXjwqcavdNT373EM7.hlk2MWp1SNYCZ5NWk/Dytyf/xPsI02a', true, 'ADMIN', 'ROLE_ADMIN', null, null, null, null, null, null);
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('Agent1', 'Agent', 'agent@gmail.com', '$2a$10$7YXN6idLLmf5Gy2K5guobOghxYVQBcc9a04fFmRd82ns12klLCmr.', true, 'AGENT', 'ROLE_AGENT', 'My company', '123456789', 'Alekse Santica 4', null, null, null);
