@@ -67,7 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/**", "/user/getCommentCreator").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/ws/**").permitAll()
+                .antMatchers("/ws/**","/ws").permitAll()
 
                 // svaki zahtev mora biti autorizovan
                 .anyRequest().authenticated().and()
