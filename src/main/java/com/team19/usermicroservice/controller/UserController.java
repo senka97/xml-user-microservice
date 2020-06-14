@@ -2,6 +2,7 @@ package com.team19.usermicroservice.controller;
 
 import com.team19.usermicroservice.dto.CommentDTO;
 import com.team19.usermicroservice.dto.CurrentUser;
+import com.team19.usermicroservice.dto.UserInfoDTO;
 import com.team19.usermicroservice.model.User;
 import com.team19.usermicroservice.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,13 @@ public class UserController {
     public ArrayList<CommentDTO> getCommentCreator(@RequestBody ArrayList<CommentDTO> comments)
     {
         return this.userService.getCommentCreator(comments);
+    }
+
+    @GetMapping(value="/info/{id}")
+    @PreAuthorize("hasAuthority('currentUser_read')")
+    public UserInfoDTO getUserInfo(@PathVariable("id") Long id){
+
+        return this.userService.getUserInfo(id);
     }
 
 }

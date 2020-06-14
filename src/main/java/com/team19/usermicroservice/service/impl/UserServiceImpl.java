@@ -1,6 +1,8 @@
 package com.team19.usermicroservice.service.impl;
 
 import com.team19.usermicroservice.dto.CommentDTO;
+import com.team19.usermicroservice.dto.UserInfoDTO;
+import com.team19.usermicroservice.model.Agent;
 import com.team19.usermicroservice.model.RegistrationRequest;
 import com.team19.usermicroservice.model.RegistrationRequestAgent;
 import com.team19.usermicroservice.model.User;
@@ -24,6 +26,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RegistrationRequestAgentRepository registrationRequestAgentRepository;
+
+    @Autowired
+    private AgentServiceImpl agentService;
+
 
     @Override
     public User getUserByEmail(String username) {
@@ -56,5 +62,26 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public UserInfoDTO getUserInfo(Long id) {
+
+        User user = this.userRepository.findById(id).orElse(null);
+        if(user == null){
+            return null;
+        }
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        userInfoDTO.setName(user.getName());
+        userInfoDTO.setSurname(user.getSurname());
+        userInfoDTO.setEmail(user.getEmail());
+        userInfoDTO.setUserId(user.getId());
+        userInfoDTO.setRole(user.getRole());
+        if(user.getRole().equals("ROLE_AGENT")){
+            Agent agent = this.agentService.getAgent(id);
+            userInfoDTO.setCompanyName(agent.getCompanyName());
+        }
+
+        return userInfoDTO;
     }
 }
