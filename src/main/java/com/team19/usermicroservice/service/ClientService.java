@@ -14,5 +14,6 @@ public interface ClientService {
     Client activateClient(Long id);
     Client blockClient(Long id);
     List<ClientFrontDTO> fillClientsInformation(List<ClientFrontDTO> clientDrontDTOs);
+    Client findClient(Long id);
 
 }
