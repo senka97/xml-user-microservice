@@ -2,9 +2,9 @@ package com.team19.usermicroservice.model;
 
 import com.team19.usermicroservice.dto.RegistrationRequestDTO;
 import com.team19.usermicroservice.enumeration.RequestStatus;
-
+import com.team19.usermicroservice.enumeration.RequestStatusByClient;
 import javax.persistence.*;
-
+import java.time.LocalDateTime;
 
 @Entity
 public class RegistrationRequest {
@@ -32,6 +32,13 @@ public class RegistrationRequest {
     @Column(name = "rreq_status", nullable = false)
     private RequestStatus status;
 
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "rreq_status_client", nullable = false)
+//    private RequestStatusByClient statusByClient;
+
+//    @Column(name="rreq_time")
+//    private LocalDateTime timeWhenAdminApprove;
+
     public RegistrationRequest() {
     }
 
@@ -54,6 +61,7 @@ public class RegistrationRequest {
         this.password = registrationRequestDTO.getPassword();
         this.phoneNumber = registrationRequestDTO.getPhoneNumber();
         this.status = RequestStatus.PENDING;
+        //this.statusByClient = RequestStatusByClient.PENDING;
     }
 
     public Long getId() {
@@ -111,4 +119,20 @@ public class RegistrationRequest {
     public void setStatus(RequestStatus status) {
         this.status = status;
     }
+
+//    public RequestStatusByClient getStatusByClient() {
+//        return statusByClient;
+//    }
+//
+//    public void setStatusByClient(RequestStatusByClient statusByClient) {
+//        this.statusByClient = statusByClient;
+//    }
+//
+//    public LocalDateTime getTimeWhenAdminApprove() {
+//        return timeWhenAdminApprove;
+//    }
+//
+//    public void setTimeWhenAdminApprove(LocalDateTime timeWhenAdminApprove) {
+//        this.timeWhenAdminApprove = timeWhenAdminApprove;
+//    }
 }
