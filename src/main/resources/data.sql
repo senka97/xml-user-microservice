@@ -175,6 +175,7 @@ insert into user (name, surname, email, password, enabled, type, role, company_n
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status, removed) values ('Pera', 'Peric', 'pera@gmail.com', '$2a$10$noSRMxRJjDHt2Ky.E1QHYupSHa8tTZ0fyVXvWE5o73PKdlrLgSyMG', true, 'CLIENT', 'ROLE_CLIENT', null, null, null, '123456789', 0, 'ACTIVE', false);
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status, removed) values ('Djura', 'Djuric', 'djura@gmail.com', '$2a$10$noSRMxRJjDHt2Ky.E1QHYupSHa8tTZ0fyVXvWE5o73PKdlrLgSyMG', true, 'CLIENT', 'ROLE_CLIENT', null, null, null, '123456789', 0, 'ACTIVE', false);
 
+--insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status, removed) values ('test', 'test', 'test@gmail.com', '$2a$10$r.O2iTjbT7mzzKii9pdgYeo0LrqZTwTGqcWqZ5fRgytBxmm0SHWJK', true, 'CLIENT', 'ROLE_CLIENT', null, null, null, '123456789', 0, 'ACTIVE', false);
 
 insert into user_roles (user_id, role_id) values (1, 1);
 insert into user_roles (user_id, role_id) values (2, 2);
@@ -184,6 +185,8 @@ insert into user_roles (user_id, role_id) values (5, 3);
 insert into user_roles (user_id, role_id) values (6, 2);
 insert into user_roles (user_id, role_id) values (7, 3);
 insert into user_roles (user_id, role_id) values (8, 3);
+
+--insert into user_roles (user_id, role_id) values (9, 3);
 
 insert into registration_request (rreq_name, rreq_surname, rreq_email, rreq_password, rreq_phone_number, rreq_status)
 values ("Nikola", "Nikolic", "nikola@mail.com", "$2a$10$DxUgxwukiMSEfd/HB/o.tuNzQuv/c6BMGj1dS0qDw8o0Xvyw4VFCq", "012345678", "PENDING");
