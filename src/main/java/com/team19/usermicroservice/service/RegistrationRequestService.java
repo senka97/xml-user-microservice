@@ -7,5 +7,9 @@ import java.util.List;
 public interface RegistrationRequestService {
 
     RegistrationRequest save(RegistrationRequest registrationRequest);
-    List<RegistrationRequest> getAllRegistrationRequests();
+    List<RegistrationRequest> getAllPendingRegistrationRequests();
+    boolean approveRegistrationRequest(Long id);
+    boolean rejectRegistrationRequest(Long id);
+    void activateAccount(Long id);
+   // void rejectRegistrationRequestsAfter24h();
 }

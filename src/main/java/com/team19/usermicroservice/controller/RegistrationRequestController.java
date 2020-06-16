@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +25,7 @@ public class RegistrationRequestController {
     @PreAuthorize("hasAuthority('allRegistrationRequests')")
     public ResponseEntity<List<RegistrationRequestDTO>> getAllRegistrationRequests() {
 
-        List<RegistrationRequest> registrationRequests = registrationRequestService.getAllRegistrationRequests();
+        List<RegistrationRequest> registrationRequests = registrationRequestService.getAllPendingRegistrationRequests();
         List<RegistrationRequestDTO> registrationRequestDTOS = new ArrayList<>();
 
         for (RegistrationRequest registrationRequest : registrationRequests) {
@@ -37,4 +34,32 @@ public class RegistrationRequestController {
 
         return new ResponseEntity<>(registrationRequestDTOS, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/{id}/approve")
+    //@PreAuthorize("hasAuthority('registration_request_update')")
+    public ResponseEntity<?> approveRegistrationRequest(@PathVariable Long id) {
+        if (registrationRequestService.approveRegistrationRequest(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "/{id}/reject")
+    //@PreAuthorize("hasAuthority('registration_request_update')")
+    public ResponseEntity<?> rejectRegistrationRequest(@PathVariable Long id) {
+        if (registrationRequestService.rejectRegistrationRequest(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "/{id}/activate/account")
+    //@PreAuthorize("hasAuthority('registration_request_update')")
+    public ResponseEntity<?> activateAccount(@PathVariable Long id) {
+        registrationRequestService.activateAccount(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
