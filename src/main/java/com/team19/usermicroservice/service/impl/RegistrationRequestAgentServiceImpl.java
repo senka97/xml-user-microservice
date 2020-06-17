@@ -1,29 +1,26 @@
 package com.team19.usermicroservice.service.impl;
 
-import com.sun.xml.bind.v2.TODO;
 import com.team19.usermicroservice.enumeration.RequestStatus;
 import com.team19.usermicroservice.model.Agent;
 import com.team19.usermicroservice.model.RegistrationRequestAgent;
 import com.team19.usermicroservice.model.Role;
+import com.team19.usermicroservice.model.VerificationTokenAgent;
 import com.team19.usermicroservice.rabbitmq.Producer;
 import com.team19.usermicroservice.rabbitmq.RegistrationMessage;
 import com.team19.usermicroservice.repository.AgentRepository;
 import com.team19.usermicroservice.repository.RegistrationRequestAgentRepository;
+import com.team19.usermicroservice.repository.VerificationTokenAgentRepository;
 import com.team19.usermicroservice.service.RegistrationRequestAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.security.SecureRandom;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RegistrationRequestAgentServiceImpl implements RegistrationRequestAgentService {
-
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private RegistrationRequestAgentRepository registrationRequestAgentRepository;
@@ -36,6 +33,12 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
 
     @Autowired
     private Producer producer;
+
+    @Autowired
+    private VerificationTokenAgentRepository verificationTokenAgentRepository;
+
+    @Autowired
+    private VerificationTokenAgentServiceImpl verificationTokenAgentService;
 
     @Override
     public RegistrationRequestAgent save(RegistrationRequestAgent registrationRequestAgent) {
@@ -62,9 +65,12 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
             RegistrationMessage message = new RegistrationMessage();
             message.setEmail(registrationRequestAgent.getEmail());
 
-            // TODO: dodati link za aktivaciju
+            VerificationTokenAgent token = new VerificationTokenAgent(UUID.randomUUID().toString(), registrationRequestAgent);
+            verificationTokenAgentRepository.save(token);
 
-            message.setContent("Hello. Admin approve your registration request. To activate your account you need to click here: ");
+            String link = "http://localhost:8080/activate-account/agent?id=" + registrationRequestAgent.getId() + "&token=" + token.getToken();
+            message.setContent("Hello. Admin approve your registration request. " +
+                    "To activate your account you need to click on this link: " + link + " .For this action you have 24 hours.");
             producer.addRequestToQueue("registration-approve-queue", message);
             return true;
         } else {
@@ -79,7 +85,7 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
         if (registrationRequestAgent != null) {
             registrationRequestAgent.setStatus(RequestStatus.REJECTED);
             registrationRequestAgentRepository.save(registrationRequestAgent);
-            //poslati mejl da je zahtev za registraciju odbijen
+
             RegistrationMessage message = new RegistrationMessage();
             message.setEmail(registrationRequestAgent.getEmail());
             message.setContent("Sorry, but admin rejected your request for registration.");
@@ -91,26 +97,38 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
     }
 
     @Override
-    public void activateAccountAgent(Long id) {
+    public boolean activateAccountAgent(Long id, String token) {
         RegistrationRequestAgent registrationRequestAgent = registrationRequestAgentRepository.getOne(id);
+        VerificationTokenAgent verificationTokenAgent = verificationTokenAgentService.findByToken(token);
 
-        if (registrationRequestAgent != null) {
-            Agent agent = new Agent();
-            agent.setName(registrationRequestAgent.getName());
-            agent.setSurname(registrationRequestAgent.getSurname());
-            agent.setEmail(registrationRequestAgent.getEmail());
-            agent.setPassword(registrationRequestAgent.getPassword());
-            agent.setRole("ROLE_AGENT");
-            agent.setEnabled(true);
+        try {
+            if (verificationTokenAgent != null) {
+                Calendar cal = Calendar.getInstance();
+                if ((verificationTokenAgent.getExpiryDate().getTime() - cal.getTime().getTime()) >= 0) {
+                    if (registrationRequestAgent != null) {
+                        Agent agent = new Agent();
+                        agent.setName(registrationRequestAgent.getName());
+                        agent.setSurname(registrationRequestAgent.getSurname());
+                        agent.setEmail(registrationRequestAgent.getEmail());
+                        agent.setPassword(registrationRequestAgent.getPassword());
+                        agent.setRole("ROLE_AGENT");
+                        agent.setEnabled(true);
 
-            //dodeliti rolu
-            List<Role> role = roleService.findByName("ROLE_AGENT");
-            agent.setRoles(role);
+                        //dodeliti rolu
+                        List<Role> role = roleService.findByName("ROLE_AGENT");
+                        agent.setRoles(role);
 
-            agent.setCompanyName(registrationRequestAgent.getCompanyName());
-            agent.setCompanyNumber(registrationRequestAgent.getCompanyNumber());
-            agent.setAddress(registrationRequestAgent.getAddress());
-            agentRepository.save(agent);
+                        agent.setCompanyName(registrationRequestAgent.getCompanyName());
+                        agent.setCompanyNumber(registrationRequestAgent.getCompanyNumber());
+                        agent.setAddress(registrationRequestAgent.getAddress());
+                        agentRepository.save(agent);
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
+        return false;
     }
 }

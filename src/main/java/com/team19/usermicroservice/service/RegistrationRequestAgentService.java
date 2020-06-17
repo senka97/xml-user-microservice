@@ -10,6 +10,6 @@ public interface RegistrationRequestAgentService {
     List<RegistrationRequestAgent> getAllPendingRegistrationRequestsAgent();
     boolean approveRegistrationRequestAgent(Long id);
     boolean rejectRegistrationRequestAgent(Long id);
-    void activateAccountAgent(Long id);
+    boolean activateAccountAgent(Long id, String token);
 
 }

@@ -10,6 +10,5 @@ public interface RegistrationRequestService {
     List<RegistrationRequest> getAllPendingRegistrationRequests();
     boolean approveRegistrationRequest(Long id);
     boolean rejectRegistrationRequest(Long id);
-    void activateAccount(Long id);
-   // void rejectRegistrationRequestsAfter24h();
+    boolean activateAccount(Long id, String token);
 }

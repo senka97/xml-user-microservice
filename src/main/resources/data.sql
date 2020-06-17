@@ -74,6 +74,9 @@ insert into permission (name) values ('priceList_read');
 insert into permission (name) values ('priceList_update');
 insert into permission (name) values ('priceList_delete');
 
+--57
+insert into permission (name) values ('registration_request_update');
+
 insert into role_permissions (role_id, permission_id) values (1, 1);
 insert into role_permissions (role_id, permission_id) values (2, 2);
 insert into role_permissions (role_id, permission_id) values (3, 3);
@@ -163,6 +166,8 @@ insert into  role_permissions (role_id, permission_id) value (2, 56); --agent c 
 insert into  role_permissions (role_id, permission_id) value (3, 53);
 insert into  role_permissions (role_id, permission_id) value (3, 54);
 insert into  role_permissions (role_id, permission_id) value (3, 56); --client c r d
+
+insert into  role_permissions (role_id, permission_id) value (1, 57); --admin registration request update
 
 
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('Admin', 'Admin', 'admin@gmail.com', '$2a$10$aMBAEXjwqcavdNT373EM7.hlk2MWp1SNYCZ5NWk/Dytyf/xPsI02a', true, 'ADMIN', 'ROLE_ADMIN', null, null, null, null, null, null);

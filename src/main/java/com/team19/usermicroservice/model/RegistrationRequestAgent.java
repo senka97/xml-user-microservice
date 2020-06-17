@@ -2,7 +2,6 @@ package com.team19.usermicroservice.model;
 
 import com.team19.usermicroservice.dto.RegistrationRequestAgentDTO;
 import com.team19.usermicroservice.enumeration.RequestStatus;
-
 import javax.persistence.*;
 
 @Entity

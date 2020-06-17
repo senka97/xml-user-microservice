@@ -65,7 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 // svim korisnicima dopusti da pristupe putanjama /auth/** i /h2-console/**
                 .authorizeRequests()
-                .antMatchers("/auth/**", "/user/getCommentCreator").permitAll()
+                .antMatchers("/auth/**", "/user/getCommentCreator", "/activate-account/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/ws/**","/ws").permitAll()
 
