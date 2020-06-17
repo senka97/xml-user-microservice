@@ -8,6 +8,7 @@ public class UserInfoDTO {
     private String email;
     private String role;
     private String companyName;
+    private String phoneNumber;
 
     public UserInfoDTO(){
 
@@ -59,5 +60,13 @@ public class UserInfoDTO {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

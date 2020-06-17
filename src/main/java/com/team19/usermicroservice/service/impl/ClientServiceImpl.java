@@ -156,4 +156,9 @@ public class ClientServiceImpl implements ClientService {
         }
         return clientFrontDTOs;
     }
+
+    @Override
+    public Client findClient(Long id) {
+        return this.clientRepository.findById(id).orElse(null);
+    }
 }
