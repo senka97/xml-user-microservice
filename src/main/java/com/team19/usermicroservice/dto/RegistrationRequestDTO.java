@@ -1,7 +1,6 @@
 package com.team19.usermicroservice.dto;
 
 import com.team19.usermicroservice.enumeration.RequestStatus;
-import com.team19.usermicroservice.enumeration.RequestStatusByClient;
 import com.team19.usermicroservice.model.RegistrationRequest;
 
 import javax.validation.constraints.NotBlank;
@@ -38,8 +37,6 @@ public class RegistrationRequestDTO {
 
     private RequestStatus status;
 
-   // private RequestStatusByClient statusByClient;
-
     public RegistrationRequestDTO() {
     }
 
@@ -60,7 +57,6 @@ public class RegistrationRequestDTO {
         this.password = registrationRequest.getPassword();
         this.phoneNumber = registrationRequest.getPhoneNumber();
         this.status = registrationRequest.getStatus();
-        //this.statusByClient = registrationRequest.getStatusByClient();
     }
 
     public Long getId() {
@@ -119,11 +115,4 @@ public class RegistrationRequestDTO {
         this.status = status;
     }
 
-//    public RequestStatusByClient getStatusByClient() {
-//        return statusByClient;
-//    }
-//
-//    public void setStatusByClient(RequestStatusByClient statusByClient) {
-//        this.statusByClient = statusByClient;
-//    }
 }

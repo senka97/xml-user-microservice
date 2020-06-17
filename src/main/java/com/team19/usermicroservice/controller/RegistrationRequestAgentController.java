@@ -36,7 +36,7 @@ public class RegistrationRequestAgentController {
     }
 
     @PutMapping(value = "/{id}/approve")
-    //@PreAuthorize("hasAuthority('registration_request_agent_update')")
+    @PreAuthorize("hasAuthority('registration_request_update')")
     public ResponseEntity<?> approveRegistrationRequestAgent(@PathVariable Long id) {
         if (registrationRequestAgentService.approveRegistrationRequestAgent(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -46,7 +46,7 @@ public class RegistrationRequestAgentController {
     }
 
     @PutMapping(value = "/{id}/reject")
-    //@PreAuthorize("hasAuthority('registration_request_agent_update')")
+    @PreAuthorize("hasAuthority('registration_request_update')")
     public ResponseEntity<?> rejectRegistrationRequestAgent(@PathVariable Long id) {
         if (registrationRequestAgentService.rejectRegistrationRequestAgent(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -55,10 +55,4 @@ public class RegistrationRequestAgentController {
         }
     }
 
-    @PutMapping(value = "/{id}/activate/account")
-    //@PreAuthorize("hasAuthority('registration_request_agent_update')")
-    public ResponseEntity<?> activateAccountAgent(@PathVariable Long id) {
-        registrationRequestAgentService.activateAccountAgent(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
