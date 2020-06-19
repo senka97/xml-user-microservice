@@ -126,6 +126,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
                         client.setPublishedAdsNumber(0);
                         client.setStatus(ClientStatus.ACTIVE);
                         client.setRemoved(false);
+                        client.setCanComment(true);
                         clientRepository.save(client);
                         return true;
                     }

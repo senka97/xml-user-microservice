@@ -20,6 +20,9 @@ public class Client extends User {
     @Column(name = "removed")
     private boolean removed;
 
+    @Column(name = "can_comment")
+    private boolean canComment;
+
     public Client() {
 
     }
@@ -63,5 +66,13 @@ public class Client extends User {
 
     public void setRemoved(boolean removed) {
         this.removed = removed;
+    }
+
+    public boolean isCanComment() {
+        return canComment;
+    }
+
+    public void setCanComment(boolean canComment) {
+        this.canComment = canComment;
     }
 }
