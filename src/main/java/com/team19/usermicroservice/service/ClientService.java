@@ -15,5 +15,7 @@ public interface ClientService {
     Client blockClient(Long id);
     List<ClientFrontDTO> fillClientsInformation(List<ClientFrontDTO> clientDrontDTOs);
     Client findClient(Long id);
+    boolean disableCreatingComment(Long clientId);
+    boolean checkClientCanComment(Long id);
 
 }

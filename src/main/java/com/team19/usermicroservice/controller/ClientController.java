@@ -103,5 +103,21 @@ public class ClientController {
         return this.clientService.fillClientsInformation(clientFrontDTOs);
     }
 
+    @GetMapping(value = "/{id}")
+    public boolean checkClientCanComment(@PathVariable Long id) {
+        if (clientService.checkClientCanComment(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    @PutMapping(value = "/{id}/disable")
+    public ResponseEntity<?> disableCreatingComment(@PathVariable Long id) {
+        if (clientService.disableCreatingComment(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
