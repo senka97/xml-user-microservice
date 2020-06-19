@@ -68,7 +68,7 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
             VerificationTokenAgent token = new VerificationTokenAgent(UUID.randomUUID().toString(), registrationRequestAgent);
             verificationTokenAgentRepository.save(token);
 
-            String link = "http://localhost:8080/activate-account/agent?id=" + registrationRequestAgent.getId() + "&token=" + token.getToken();
+            String link = "https://localhost:8080/activate-account/agent?id=" + registrationRequestAgent.getId() + "&token=" + token.getToken();
             message.setContent("Hello. Admin approve your registration request. " +
                     "To activate your account you need to click on this link: " + link + " .For this action you have 24 hours.");
             producer.addRequestToQueue("registration-approve-queue", message);

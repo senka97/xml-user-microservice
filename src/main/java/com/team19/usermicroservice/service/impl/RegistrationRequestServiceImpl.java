@@ -71,7 +71,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
             VerificationTokenClient verificationTokenClient = new VerificationTokenClient(UUID.randomUUID().toString(), registrationRequest);
             verificationTokenClientRepository.save(verificationTokenClient);
 
-            String link = "http://localhost:8080/activate-account?id=" + registrationRequest.getId() + "&token=" + verificationTokenClient.getToken();
+            String link = "https://localhost:8080/activate-account?id=" + registrationRequest.getId() + "&token=" + verificationTokenClient.getToken();
             registrationMessage.setContent("Hello. Admin approve your registration request. " +
                     "To activate your account you need to click on this link: " + link + " .For this action you have 24 hours.");
             producer.addRequestToQueue("registration-approve-queue", registrationMessage);
