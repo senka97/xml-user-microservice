@@ -12,6 +12,7 @@ public class ClientDTO {
     private String phoneNumber;
     private ClientStatus status;
     private boolean removed;
+    private boolean canComment;
 
     public ClientDTO() {
     }
@@ -24,6 +25,7 @@ public class ClientDTO {
         this.phoneNumber = phoneNumber;
         this.status = status;
         this.removed = false;
+        this.canComment = true;
     }
 
     public ClientDTO(Client client) {
@@ -34,6 +36,7 @@ public class ClientDTO {
         this.phoneNumber = client.getPhoneNumber();
         this.status = client.getStatus();
         this.removed = client.isRemoved();
+        this.canComment = client.isCanComment();
     }
 
     public Long getId() {
@@ -90,5 +93,13 @@ public class ClientDTO {
 
     public void setRemoved(boolean removed) {
         this.removed = removed;
+    }
+
+    public boolean isCanComment() {
+        return canComment;
+    }
+
+    public void setCanComment(boolean canComment) {
+        this.canComment = canComment;
     }
 }
