@@ -12,25 +12,25 @@ insert into permission (name) values ('postClient');
 
 insert into permission (name) values ('currentUser_read');
 
-insert into permission (name) values ('allRegistrationRequests');
-insert into permission (name) values ('allClients');
-insert into permission (name) values ('allActiveClients');
-insert into permission (name) values ('allBlockedClients');
-insert into permission (name) values ('deleteClient');
-insert into permission (name) values ('allAgents');
-insert into permission (name) values ('getAgent');
-insert into permission (name) values ('activateClient');
-insert into permission (name) values ('blockClient');
-insert into permission (name) values ('addCarModel');
-insert into permission (name) values ('removeCarModel');
-insert into permission (name) values ('addCarBrand');
-insert into permission (name) values ('removeCarBrand');
-insert into permission (name) values ('addCarClass');
-insert into permission (name) values ('removeCarClass');
-insert into permission (name) values ('addFuelType');
-insert into permission (name) values ('removeFuelType');
-insert into permission (name) values ('addTransmissionType');
-insert into permission (name) values ('removeTransmissionType');
+insert into permission (name) values ('registration_request_read'); --8
+insert into permission (name) values ('client_read'); --9
+insert into permission (name) values ('allActiveClients'); --10 ova se ne koristi
+insert into permission (name) values ('allBlockedClients'); --11 ova se ne koristi
+insert into permission (name) values ('client_delete'); --12
+insert into permission (name) values ('agent_read'); --13
+insert into permission (name) values ('getAgent'); --14 ova se ne koristi
+insert into permission (name) values ('client_update'); --15
+insert into permission (name) values ('blockClient'); --16 ova se ne koristi
+insert into permission (name) values ('car_model_create'); --17
+insert into permission (name) values ('car_model_delete'); --18
+insert into permission (name) values ('car_brand_create'); --19
+insert into permission (name) values ('car_brand_delete'); --20
+insert into permission (name) values ('car_class_create'); --21
+insert into permission (name) values ('car_class_delete'); --22
+insert into permission (name) values ('fuel_type_create'); --23
+insert into permission (name) values ('fuel_type_delete'); --24
+insert into permission (name) values ('transmission_type_create'); --25
+insert into permission (name) values ('transmission_type_delete'); --26
 
 insert into permission (name) values ('cartItem_insert');
 insert into permission (name) values ('cartItem_delete');
@@ -46,21 +46,20 @@ insert into permission (name) values ('ad_update');
 
 insert into permission (name) values ('request_create');
 
-insert into permission (name) values ('allRegistrationRequestsAgent');
+insert into permission (name) values ('registration_request_a_read'); --37
 
 insert into permission (name) values ('fillClient');
 insert into permission (name) values ('request_update');
 insert into permission (name) values ('request_read');
 insert into permission (name) values ('request_update_cancel');
 
-insert into permission (name) values ('allComments');
-insert into permission (name) values ('allReplies');
-insert into permission (name) values ('reply_update');
-insert into permission (name) values ('request_reject_update');
+insert into permission (name) values ('allComments'); --42 ova se ne koristi
+insert into permission (name) values ('allReplies'); --43 ova se ne koristi
+insert into permission (name) values ('reply_update'); --44 ova se ne koristi
+insert into permission (name) values ('request_reject_update'); --45 ova se ne koristi
 
-insert into permission (name) values ('rate_update');
-insert into permission (name) values ('user_can_rate');
---insert into permission (name) values ('rating_status');
+insert into permission (name) values ('rate_update'); --46
+insert into permission (name) values ('rate_create'); --47
 
 insert into permission (name) value ('message_r_c'); -- 48
 --49 50 51 52
@@ -85,6 +84,8 @@ insert into permission (name) values ('car_create');
 insert into permission (name) values ('car_read');
 insert into permission (name) values ('car_update');
 
+insert into permission (name) values ('password_update');
+
 insert into role_permissions (role_id, permission_id) values (1, 1);
 insert into role_permissions (role_id, permission_id) values (2, 2);
 insert into role_permissions (role_id, permission_id) values (3, 3);
@@ -99,13 +100,13 @@ insert into role_permissions (role_id, permission_id) values (3,7);
 
 insert into role_permissions (role_id, permission_id) values (1, 8);
 insert into role_permissions (role_id, permission_id) values (1, 9);
-insert into role_permissions (role_id, permission_id) values (1, 10);
-insert into role_permissions (role_id, permission_id) values (1, 11);
+insert into role_permissions (role_id, permission_id) values (1, 10); --ne koristi se
+insert into role_permissions (role_id, permission_id) values (1, 11); --ne koristi se
 insert into role_permissions (role_id, permission_id) values (1, 12);
 insert into role_permissions (role_id, permission_id) values (1, 13);
-insert into role_permissions (role_id, permission_id) values (1, 14);
+insert into role_permissions (role_id, permission_id) values (1, 14); --ne koristi se
 insert into role_permissions (role_id, permission_id) values (1, 15);
-insert into role_permissions (role_id, permission_id) values (1, 16);
+insert into role_permissions (role_id, permission_id) values (1, 16); --ne koristi se
 insert into role_permissions (role_id, permission_id) values (1, 17);
 insert into role_permissions (role_id, permission_id) values (1, 18);
 insert into role_permissions (role_id, permission_id) values (1, 19);
@@ -149,14 +150,14 @@ insert into role_permissions (role_id, permission_id) values (2, 40);
 insert into role_permissions (role_id, permission_id) values (3, 40);
 insert into role_permissions (role_id, permission_id) values (3, 41);
 
-insert into role_permissions (role_id, permission_id) values (1, 42);
-insert into role_permissions (role_id, permission_id) values (1, 43);
-insert into role_permissions (role_id, permission_id) values (1, 44);
-insert into role_permissions (role_id, permission_id) values (1, 45);
+insert into role_permissions (role_id, permission_id) values (1, 42); --ne koristi se
+insert into role_permissions (role_id, permission_id) values (1, 43); --ne koristi se
+insert into role_permissions (role_id, permission_id) values (1, 44); --ne koristi se
+insert into role_permissions (role_id, permission_id) values (1, 45); --ne koristi se
+insert into role_permissions (role_id, permission_id) values (1, 39);
 
 insert into role_permissions (role_id, permission_id) values (3, 46);
 insert into role_permissions (role_id, permission_id) values (3, 47);
---insert into role_permissions (role_id, permission_id) values (3, 48);
 
 insert into  role_permissions (role_id, permission_id) value (2, 48); -- message read and create
 insert into  role_permissions (role_id, permission_id) value (3, 48);
@@ -189,6 +190,10 @@ insert into  role_permissions (role_id, permission_id) value (2, 62); --agent c 
 insert into  role_permissions (role_id, permission_id) value (3, 60);
 insert into  role_permissions (role_id, permission_id) value (3, 61);
 insert into  role_permissions (role_id, permission_id) value (3, 62); --client c r u
+
+insert into role_permissions (role_id, permission_id) values (1, 63); --admin password update
+insert into role_permissions (role_id, permission_id) values (2, 63); --agent password update
+insert into role_permissions (role_id, permission_id) values (3, 63); --client password update
 
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('Admin', 'Admin', 'admin@gmail.com', '$2a$10$aMBAEXjwqcavdNT373EM7.hlk2MWp1SNYCZ5NWk/Dytyf/xPsI02a', true, 'ADMIN', 'ROLE_ADMIN', null, null, null, null, null, null);
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('Agent1', 'Agent', 'agent@gmail.com', '$2a$10$7YXN6idLLmf5Gy2K5guobOghxYVQBcc9a04fFmRd82ns12klLCmr.', true, 'AGENT', 'ROLE_AGENT', 'My company', '123456789', 'Alekse Santica 4', null, null, null);

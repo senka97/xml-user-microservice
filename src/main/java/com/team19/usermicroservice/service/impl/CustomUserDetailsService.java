@@ -14,9 +14,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +29,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Override
     public UserDetails loadUserByUsername(String email)  throws UsernameNotFoundException {
@@ -56,8 +60,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return authorities;
     }
 
-    // Funkcija pomocu koje korisnik menja svoju lozinku
-  /* public void changePassword(String oldPassword, String newPassword) {
+    public void changePassword(String oldPassword, String newPassword) {
 
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         String email = currentUser.getName();
@@ -70,10 +73,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         User user = (User) loadUserByUsername(email);
 
-        user.setPassword(passwordEncoder.encode(newPassword));
-        //user.setPasswordChanged(true);
+        // work factor of bcrypt
+        int strength = 10;
+        // secureRandom() is salt generator
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
         userRepository.save(user);
 
-    }*/
+    }
 
 }

@@ -22,7 +22,7 @@ public class RegistrationRequestAgentController {
     private RegistrationRequestAgentServiceImpl registrationRequestAgentService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('allRegistrationRequestsAgent')")
+    @PreAuthorize("hasAuthority('registration_request_a_read')")
     public ResponseEntity<List<RegistrationRequestAgentDTO>> getAllRegistrationRequestsAgent() {
 
         List<RegistrationRequestAgent> registrationRequestsAgent = registrationRequestAgentService.getAllPendingRegistrationRequestsAgent();

@@ -23,7 +23,7 @@ public class ClientController {
     private ClientServiceImpl clientService;
 
     @GetMapping(produces = "application/json")
-    @PreAuthorize("hasAuthority('allClients')")
+    @PreAuthorize("hasAuthority('client_read')")
     public ResponseEntity<List<ClientDTO>> getAllClients() {
 
         List<Client> clients = clientService.getAllClients();
@@ -38,7 +38,7 @@ public class ClientController {
     }
 
     @GetMapping(value = "/active", produces = "application/json")
-    @PreAuthorize("hasAuthority('allActiveClients')")
+    @PreAuthorize("hasAuthority('client_read')")
     public ResponseEntity<List<ClientDTO>> getAllActiveClients() {
 
         List<Client> activeClients = clientService.getAllActiveClients();
@@ -53,7 +53,7 @@ public class ClientController {
     }
 
     @GetMapping(value = "/blocked", produces = "application/json")
-    @PreAuthorize("hasAuthority('allBlockedClients')")
+    @PreAuthorize("hasAuthority('client_read')")
     public ResponseEntity<List<ClientDTO>> getAllBlockedClients() {
 
         List<Client> blockedClients = clientService.getAllBlockedClients();
@@ -68,14 +68,14 @@ public class ClientController {
     }
 
     @DeleteMapping(value = "/{id}")
-    @PreAuthorize("hasAuthority('deleteClient')")
+    @PreAuthorize("hasAuthority('client_delete')")
     public ResponseEntity<?> deleteClient(@PathVariable Long id) {
         clientService.removeClient(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}/activate")
-    @PreAuthorize("hasAuthority('activateClient')")
+    @PreAuthorize("hasAuthority('client_update')")
     public ResponseEntity<ClientDTO> activateClient(@PathVariable Long id) {
         Client client = clientService.activateClient(id);
 
@@ -86,7 +86,7 @@ public class ClientController {
     }
 
     @PutMapping(value = "/{id}/block")
-    @PreAuthorize("hasAuthority('blockClient')")
+    @PreAuthorize("hasAuthority('client_update')")
     public ResponseEntity<ClientDTO> blockClient(@PathVariable Long id) {
         Client client = clientService.blockClient(id);
 
