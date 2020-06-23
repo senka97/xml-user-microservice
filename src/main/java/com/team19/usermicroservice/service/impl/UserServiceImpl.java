@@ -1,16 +1,25 @@
 package com.team19.usermicroservice.service.impl;
 
 import com.team19.usermicroservice.dto.CommentDTO;
+import com.team19.usermicroservice.dto.ForgotPasswordDTO;
+import com.team19.usermicroservice.dto.ResetPasswordDTO;
 import com.team19.usermicroservice.dto.UserInfoDTO;
 import com.team19.usermicroservice.model.*;
+import com.team19.usermicroservice.rabbitmq.Message;
+import com.team19.usermicroservice.rabbitmq.Producer;
 import com.team19.usermicroservice.repository.RegistrationRequestAgentRepository;
 import com.team19.usermicroservice.repository.RegistrationRequestRepository;
+import com.team19.usermicroservice.repository.ResetPasswordTokenRepository;
 import com.team19.usermicroservice.repository.UserRepository;
 import com.team19.usermicroservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,6 +39,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ClientServiceImpl clientService;
 
+    @Autowired
+    private ResetPasswordTokenRepository resetPasswordTokenRepository;
+
+    @Autowired
+    private Producer producer;
 
     @Override
     public User getUserByEmail(String username) {
@@ -87,5 +101,50 @@ public class UserServiceImpl implements UserService {
         }
 
         return userInfoDTO;
+    }
+
+    @Override
+    public boolean forgotPassword(ForgotPasswordDTO forgotPasswordDTO) {
+        User user = userRepository.findByEmail(forgotPasswordDTO.getEmail());
+        if (user != null) {
+            Message message = new Message();
+            message.setEmail(user.getEmail());
+
+            ResetPasswordToken resetPasswordToken = new ResetPasswordToken(UUID.randomUUID().toString(), user);
+            resetPasswordTokenRepository.save(resetPasswordToken);
+
+            String link = "http://localhost:8080/reset-password?token=" + resetPasswordToken.getToken();
+            message.setSubject("Resetting password");
+            message.setContent("Hello. To reset your password you need to click on this link: " + link + " .For this action you have 24 hours.");
+            producer.addRequestToMessageQueue("message-queue", message);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findByToken(resetPasswordDTO.getToken());
+        try {
+            if (resetPasswordToken != null) {
+                Calendar cal = Calendar.getInstance();
+                if ((resetPasswordToken.getExpiryDate().getTime() - cal.getTime().getTime()) >= 0) {
+                    User user = resetPasswordToken.getUser();
+                    if (user != null) {
+                        // work factor of bcrypt
+                        int strength = 10;
+                        // secureRandom() is salt generator
+                        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
+                        user.setPassword(bCryptPasswordEncoder.encode(resetPasswordDTO.getNewPassword()));
+                        userRepository.save(user);
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return false;
     }
 }

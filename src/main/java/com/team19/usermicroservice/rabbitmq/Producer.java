@@ -21,7 +21,18 @@ public class Producer {
      * Poruka se salje u exchange (default exchange u ovom primeru) i
      * exchange ce rutirati poruke u pravi queue.
      */
-    public void addRequestToQueue(String routingkey, RegistrationMessage message) {
+    public void addRequestToRegistrationQueue(String routingkey, RegistrationMessage message) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String messageJson = null;
+        try {
+            messageJson = objectMapper.writeValueAsString(message);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        this.rabbitTemplate.convertAndSend(routingkey, messageJson);
+    }
+
+    public void addRequestToMessageQueue(String routingkey, Message message) {
         ObjectMapper objectMapper = new ObjectMapper();
         String messageJson = null;
         try {
