@@ -71,7 +71,7 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
             String link = "https://localhost:8080/activate-account/agent?id=" + registrationRequestAgent.getId() + "&token=" + token.getToken();
             message.setContent("Hello. Admin approve your registration request. " +
                     "To activate your account you need to click on this link: " + link + " .For this action you have 24 hours.");
-            producer.addRequestToQueue("registration-approve-queue", message);
+            producer.addRequestToRegistrationQueue("registration-approve-queue", message);
             return true;
         } else {
             return false;
@@ -89,7 +89,7 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
             RegistrationMessage message = new RegistrationMessage();
             message.setEmail(registrationRequestAgent.getEmail());
             message.setContent("Sorry, but admin rejected your request for registration.");
-            producer.addRequestToQueue("registration-reject-queue", message);
+            producer.addRequestToRegistrationQueue("registration-reject-queue", message);
             return true;
         } else {
             return false;

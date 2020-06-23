@@ -1,6 +1,5 @@
 package com.team19.usermicroservice;
 
-import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -28,6 +27,9 @@ public class UsermicroserviceApplication {
 	@Value("${registrationapprovequeue}")
 	String approveQueue;
 
+	@Value("${messagequeue}")
+	String messageQueue;
+
 	@Bean
 	Queue rejectQueue() {
 		return new Queue(rejectQueue, true);
@@ -36,6 +38,11 @@ public class UsermicroserviceApplication {
 	@Bean
 	Queue approveQueue() {
 		return new Queue(approveQueue, true);
+	}
+
+	@Bean
+	Queue messageQueue() {
+		return new Queue(messageQueue, true);
 	}
 
 
@@ -51,16 +58,8 @@ public class UsermicroserviceApplication {
 		rabbitAdmin.afterPropertiesSet();
 		rabbitAdmin.declareQueue(rejectQueue());
 		rabbitAdmin.declareQueue(approveQueue());
+		rabbitAdmin.declareQueue(messageQueue());
 		return rabbitAdmin;
 	}
-
-//	@Bean
-//	public Declarables declareQueues() {
-//		Queue queue1 = new Queue(rejectQueue, false);
-//		queue1.setAdminsThatShouldDeclare(rabbitAdmin());
-//		Queue queue2 = new Queue(approveQueue, false);
-//		queue2.setAdminsThatShouldDeclare(rabbitAdmin());
-//		return new Declarables(rejectQueue(), approveQueue());
-//	}
 
 }
