@@ -12,6 +12,8 @@ import com.team19.usermicroservice.service.impl.RegistrationRequestAgentServiceI
 import com.team19.usermicroservice.service.impl.RegistrationRequestServiceImpl;
 
 import com.team19.usermicroservice.service.impl.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,6 +57,8 @@ public class AuthenticationController {
 
     @Autowired
     private RegistrationRequestAgentServiceImpl registrationRequestAgentService;
+
+    Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) throws AuthenticationException, IOException {
@@ -104,6 +108,7 @@ public class AuthenticationController {
         else
         {
             System.out.println("User not found");
+            logger.warn("Login failed:user not found");
             return new ResponseEntity<>("User doesn't exist in the system",HttpStatus.NOT_FOUND);
 
         }
