@@ -22,7 +22,7 @@ public class AgentController {
     private AgentServiceImpl agentService;
 
     @GetMapping(produces = "application/json")
-    @PreAuthorize("hasAuthority('allAgents')")
+    @PreAuthorize("hasAuthority('agent_read')")
     public ResponseEntity<List<AgentDTO>> getAllAgents() {
 
         List<Agent> agents = agentService.getAllAgents();
@@ -41,7 +41,7 @@ public class AgentController {
     }
 
     @GetMapping(value = "/{id}")
-    @PreAuthorize("hasAuthority('getAgent')")
+    @PreAuthorize("hasAuthority('agent_read')")
     public ResponseEntity<AgentDTO> getAgent(@PathVariable Long id) {
         Agent agent = agentService.getAgent(id);
 

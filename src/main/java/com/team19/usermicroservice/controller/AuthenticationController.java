@@ -1,13 +1,11 @@
 package com.team19.usermicroservice.controller;
 
-import com.team19.usermicroservice.dto.RegistrationRequestAgentDTO;
-import com.team19.usermicroservice.dto.RegistrationRequestDTO;
-import com.team19.usermicroservice.dto.UserTokenState;
-import com.team19.usermicroservice.dto.VerificationResponse;
+import com.team19.usermicroservice.dto.*;
 import com.team19.usermicroservice.model.*;
 import com.team19.usermicroservice.security.TokenUtils;
 import com.team19.usermicroservice.security.auth.JwtAuthenticationRequest;
 import com.team19.usermicroservice.service.UserService;
+import com.team19.usermicroservice.service.impl.CustomUserDetailsService;
 import com.team19.usermicroservice.service.impl.RegistrationRequestAgentServiceImpl;
 import com.team19.usermicroservice.service.impl.RegistrationRequestServiceImpl;
 
@@ -18,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -57,6 +56,9 @@ public class AuthenticationController {
 
     @Autowired
     private RegistrationRequestAgentServiceImpl registrationRequestAgentService;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
@@ -189,6 +191,13 @@ public class AuthenticationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @PreAuthorize("hasAuthority('password_update')")
+    @PostMapping(value = "/change-password", consumes = "application/json")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDTO) {
+        customUserDetailsService.changePassword(changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
