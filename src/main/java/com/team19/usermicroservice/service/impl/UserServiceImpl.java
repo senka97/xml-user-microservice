@@ -12,6 +12,8 @@ import com.team19.usermicroservice.repository.RegistrationRequestRepository;
 import com.team19.usermicroservice.repository.ResetPasswordTokenRepository;
 import com.team19.usermicroservice.repository.UserRepository;
 import com.team19.usermicroservice.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private Producer producer;
 
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Override
     public User getUserByEmail(String username) {
         return userRepository.findByEmail(username);
@@ -61,6 +65,10 @@ public class UserServiceImpl implements UserService {
             {
                 com.setUserName(u.getName());
                 com.setUserLastname(u.getSurname());
+            }
+            else
+            {
+                logger.warn("Finding comment creator - user id: " + com.getFromComment() + " not found");
             }
         }
 
