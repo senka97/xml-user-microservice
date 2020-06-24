@@ -66,7 +66,7 @@ public class AuthenticationController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) throws AuthenticationException, IOException {
 
         if(!checkMail(authenticationRequest.getEmail())) {
-            System.out.println("Invalid email");
+            logger.warn("Logging in - invalid email");
             return new ResponseEntity<>("Invalid email",HttpStatus.BAD_REQUEST);
         }
 
@@ -75,15 +75,15 @@ public class AuthenticationController {
         if(user!=null) {
 
             if(org.springframework.security.crypto.bcrypt.BCrypt.checkpw(authenticationRequest.getPassword(), user.getPassword())){
-                System.out.println("Logged in successfully, email: " + user.getEmail());
+                //System.out.println("Logged in successfully, email: " + user.getEmail());
             }else{
-                System.out.println("Invalid password");
+                logger.warn("Logging in - invalid password");
                 return new ResponseEntity<>("Invalid password",HttpStatus.BAD_REQUEST);
             }
 
             if(!user.isEnabled())
             {
-                System.out.println("User is not activated, email: " + user.getEmail());
+                logger.warn("Logging in - user not activated, email: " + user.getEmail());
                 return new ResponseEntity<>("User not activated",HttpStatus.EXPECTATION_FAILED);
             }
 
@@ -96,23 +96,22 @@ public class AuthenticationController {
                     SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
             //ispis permisija
-            for (GrantedAuthority authority : authorities) {
+           /* for (GrantedAuthority authority : authorities) {
                 System.out.println("Authority: " + authority.getAuthority());
-            }
+            }*/
 
             User user1 = (User) authentication.getPrincipal();
             String jwt = tokenUtils.generateToken(user1.getEmail());
             int expiresIn = tokenUtils.getExpiredIn();
 
+            logger.info("Logging in - successful, email: " + user.getEmail());
             return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
 
         }
         else
         {
-            System.out.println("User not found");
             logger.warn("Login failed:user not found");
             return new ResponseEntity<>("User doesn't exist in the system",HttpStatus.NOT_FOUND);
-
         }
 
     }

@@ -35,7 +35,7 @@ public class UserController {
         return new ResponseEntity<>(currentUserDto, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/getCommentCreator")
+    @PostMapping(value = "/comment")
     // treba svi da pristupe jer svi mogu da citaju komentare
     public ArrayList<CommentDTO> getCommentCreator(@RequestBody ArrayList<CommentDTO> comments)
     {
