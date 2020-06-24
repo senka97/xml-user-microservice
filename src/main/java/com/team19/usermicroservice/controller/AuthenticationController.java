@@ -4,6 +4,7 @@ import com.team19.usermicroservice.dto.*;
 import com.team19.usermicroservice.model.*;
 import com.team19.usermicroservice.security.TokenUtils;
 import com.team19.usermicroservice.security.auth.JwtAuthenticationRequest;
+import com.team19.usermicroservice.security.auth.TokenBasedAuthentication;
 import com.team19.usermicroservice.service.UserService;
 import com.team19.usermicroservice.service.impl.CustomUserDetailsService;
 import com.team19.usermicroservice.service.impl.RegistrationRequestAgentServiceImpl;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -161,6 +163,7 @@ public class AuthenticationController {
     public ResponseEntity<?> registration(@Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {
 
         if (!userServiceImpl.emailExist(registrationRequestDTO.getEmail())) {
+            logger.warn(MessageFormat.format("RR-Email:{0}-already exist", registrationRequestDTO.getEmail()));
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -168,8 +171,10 @@ public class AuthenticationController {
 
         if (registrationRequest != null) {
             registrationRequestService.save(registrationRequest);
+            logger.info(MessageFormat.format("RR-ID:{0}-created;", registrationRequest.getId())); //RR-registration request
             return new ResponseEntity<>(registrationRequestDTO, HttpStatus.CREATED);
         } else {
+            logger.info("RR-not created;");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -179,6 +184,7 @@ public class AuthenticationController {
     public ResponseEntity<?> registrationAgent(@Valid @RequestBody RegistrationRequestAgentDTO registrationRequestAgentDTO) {
 
         if (!userServiceImpl.emailExist(registrationRequestAgentDTO.getEmail())) {
+            logger.warn(MessageFormat.format("RRA-Email:{0}-already exist", registrationRequestAgentDTO.getEmail()));
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -186,8 +192,10 @@ public class AuthenticationController {
 
         if (registrationRequestAgent != null) {
             registrationRequestAgentService.save(registrationRequestAgent);
+            logger.info(MessageFormat.format("RRA-ID:{0}-created;", registrationRequestAgent.getId())); //RRA-registration request agent
             return new ResponseEntity<>(registrationRequestAgentDTO, HttpStatus.CREATED);
         } else {
+            logger.info("RRA-not created;");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -196,15 +204,22 @@ public class AuthenticationController {
     @PreAuthorize("hasAuthority('password_update')")
     @PostMapping(value = "/change-password", consumes = "application/json")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDTO) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TokenBasedAuthentication tokenBasedAuthentication = (TokenBasedAuthentication) auth;
+        User user = (User) tokenBasedAuthentication.getPrincipal();
+
         customUserDetailsService.changePassword(changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
+        logger.info(MessageFormat.format("CP-update;UserID:{0}", user.getId().toString())); //CP-change password
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/forgot-password", consumes = "application/json")
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
         if (userServiceImpl.forgotPassword(forgotPasswordDTO)) {
+            logger.info(MessageFormat.format("FP-Email:{0}-received;", forgotPasswordDTO.getEmail())); //FP-forgot password
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
+            logger.warn(MessageFormat.format("FP-user not found;Email:{0}", forgotPasswordDTO.getEmail()));
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -212,8 +227,10 @@ public class AuthenticationController {
     @PutMapping(value = "/reset-password", consumes = "application/json")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO) {
         if (userServiceImpl.resetPassword(resetPasswordDTO)) {
+            logger.info("Pass reset;");
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
+            logger.info("Pass not reset;");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

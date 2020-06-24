@@ -1,5 +1,6 @@
 package com.team19.usermicroservice.service.impl;
 
+import com.team19.usermicroservice.controller.RegistrationRequestController;
 import com.team19.usermicroservice.enumeration.RequestStatus;
 import com.team19.usermicroservice.model.Agent;
 import com.team19.usermicroservice.model.RegistrationRequestAgent;
@@ -15,9 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
+import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class RegistrationRequestAgentServiceImpl implements RegistrationRequestAgentService {
@@ -39,6 +43,8 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
 
     @Autowired
     private VerificationTokenAgentServiceImpl verificationTokenAgentService;
+
+    Logger logger = LoggerFactory.getLogger(RegistrationRequestAgentServiceImpl.class);
 
     @Override
     public RegistrationRequestAgent save(RegistrationRequestAgent registrationRequestAgent) {
