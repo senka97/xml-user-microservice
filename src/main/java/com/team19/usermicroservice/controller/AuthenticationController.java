@@ -229,7 +229,7 @@ public class AuthenticationController {
             logger.info("Pass reset;");
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            logger.info("Pass not reset;");
+            logger.warn("Pass reset failed;");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

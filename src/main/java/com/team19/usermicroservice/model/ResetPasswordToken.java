@@ -24,6 +24,9 @@ public class ResetPasswordToken {
     @Column(name = "date", nullable = false)
     private Date expiryDate;
 
+    @Column(name = "used")
+    private boolean used;
+
     public ResetPasswordToken() {
     }
 
@@ -31,6 +34,7 @@ public class ResetPasswordToken {
         this.token = token;
         this.user = user;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.used = false;
     }
 
     public Long getId() {
@@ -63,6 +67,14 @@ public class ResetPasswordToken {
 
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 
     private Date calculateExpiryDate(int expiryTimeInMinutes) {

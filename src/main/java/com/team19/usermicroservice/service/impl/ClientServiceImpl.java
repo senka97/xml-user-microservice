@@ -17,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +38,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private RentClient rentClient;
+
+    Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
 
     @Override
     public List<Client> getAllClients() {
@@ -70,7 +75,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void removeClient(Long id) {
+    public void  removeClient(Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         TokenBasedAuthentication tokenBasedAuthentication = (TokenBasedAuthentication) auth;
         User user = (User) tokenBasedAuthentication.getPrincipal();
@@ -83,6 +88,7 @@ public class ClientServiceImpl implements ClientService {
         client.setStatus(ClientStatus.INACTIVE);
         client.setEnabled(false);
 
+        logger.info("RC-calling external services;"); //RC remove client
         adClient.hideAdsForBlockedClient(id, permissions, userID, token);
         carClient.hideCommentRequestsForBlockedAndRemovedClient(id, permissions, userID, token);
         rentClient.rejectAllPendingRequestForBlockedOrRemovedClient(id, permissions, userID, token);
@@ -113,6 +119,7 @@ public class ClientServiceImpl implements ClientService {
         client.setStatus(ClientStatus.ACTIVE);
         client.setEnabled(true);
 
+        logger.info("AC-calling external service;");//AC activate client
         adClient.showAdsForActiveClient(id, permissions, userID, token);
         clientRepository.save(client);
         return client;
@@ -132,6 +139,7 @@ public class ClientServiceImpl implements ClientService {
         client.setStatus(ClientStatus.BLOCKED);
         client.setEnabled(false);
 
+        logger.info("BC-calling external services;");//BC block client
         adClient.hideAdsForBlockedClient(id, permissions, userID, token);
         carClient.hideCommentRequestsForBlockedAndRemovedClient(id, permissions, userID, token);
         rentClient.rejectAllPendingRequestForBlockedOrRemovedClient(id, permissions, userID, token);
