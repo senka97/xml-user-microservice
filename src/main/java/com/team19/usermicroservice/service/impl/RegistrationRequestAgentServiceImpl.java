@@ -2,17 +2,17 @@ package com.team19.usermicroservice.service.impl;
 
 import com.team19.usermicroservice.controller.RegistrationRequestController;
 import com.team19.usermicroservice.enumeration.RequestStatus;
-import com.team19.usermicroservice.model.Agent;
-import com.team19.usermicroservice.model.RegistrationRequestAgent;
-import com.team19.usermicroservice.model.Role;
-import com.team19.usermicroservice.model.VerificationTokenAgent;
+import com.team19.usermicroservice.model.*;
 import com.team19.usermicroservice.rabbitmq.Producer;
 import com.team19.usermicroservice.rabbitmq.RegistrationMessage;
 import com.team19.usermicroservice.repository.AgentRepository;
 import com.team19.usermicroservice.repository.RegistrationRequestAgentRepository;
 import com.team19.usermicroservice.repository.VerificationTokenAgentRepository;
+import com.team19.usermicroservice.security.auth.TokenBasedAuthentication;
 import com.team19.usermicroservice.service.RegistrationRequestAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
@@ -63,6 +63,9 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
 
     @Override
     public boolean approveRegistrationRequestAgent(Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TokenBasedAuthentication tokenBasedAuthentication = (TokenBasedAuthentication) auth;
+        User user = (User) tokenBasedAuthentication.getPrincipal();
         RegistrationRequestAgent registrationRequestAgent = registrationRequestAgentRepository.getOne(id);
 
         if (registrationRequestAgent != null) {
@@ -72,20 +75,26 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
             message.setEmail(registrationRequestAgent.getEmail());
 
             VerificationTokenAgent token = new VerificationTokenAgent(UUID.randomUUID().toString(), registrationRequestAgent);
+            logger.info(MessageFormat.format("RRA-ID:{0}-approved,created token", id));
             verificationTokenAgentRepository.save(token);
 
-            String link = "https://localhost:8080/activate-account/agent?id=" + registrationRequestAgent.getId() + "&token=" + token.getToken();
+            String link = "http://localhost:8080/activate-account/agent?id=" + registrationRequestAgent.getId() + "&token=" + token.getToken();
             message.setContent("Hello. Admin approve your registration request. " +
                     "To activate your account you need to click on this link: " + link + " .For this action you have 24 hours.");
             producer.addRequestToRegistrationQueue("registration-approve-queue", message);
+            logger.info(MessageFormat.format("RRA-ID:{0}-approved,SRTQ", id)); //SRTQ sending request to queue
             return true;
         } else {
+            logger.info(MessageFormat.format("RRA-ID:{0}-not found;UserID:{1}", id, user.getId().toString()));
             return false;
         }
     }
 
     @Override
     public boolean rejectRegistrationRequestAgent(Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        TokenBasedAuthentication tokenBasedAuthentication = (TokenBasedAuthentication) auth;
+        User user = (User) tokenBasedAuthentication.getPrincipal();
         RegistrationRequestAgent registrationRequestAgent = registrationRequestAgentRepository.getOne(id);
 
         if (registrationRequestAgent != null) {
@@ -96,8 +105,10 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
             message.setEmail(registrationRequestAgent.getEmail());
             message.setContent("Sorry, but admin rejected your request for registration.");
             producer.addRequestToRegistrationQueue("registration-reject-queue", message);
+            logger.info(MessageFormat.format("RRA-ID:{0}-rejected,SRTQ", id)); //SRTQ sending request to queue
             return true;
         } else {
+            logger.info(MessageFormat.format("RR-ID:{0}-not found;UserID:{1}", id, user.getId().toString()));
             return false;
         }
     }
@@ -131,9 +142,11 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
                         return true;
                     }
                 }
+                logger.warn(MessageFormat.format("A-activate account;token expired;RRA:ID{0}", id));
             }
         } catch (Exception e) {
-            System.out.println(e);
+            logger.error(MessageFormat.format("A-activate account failed;RRA:ID{0}", id));
+            e.printStackTrace();
         }
         return false;
     }

@@ -113,7 +113,7 @@ public class ClientController {
             logger.info(MessageFormat.format("C-ID:{0}-activated;UserID:{1}", id, user.getId().toString()));
             return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
         }
-        logger.info(MessageFormat.format("C-ID:{0}-not activated;UserID:{1}", id, user.getId().toString()));
+        logger.info(MessageFormat.format("C-ID:{0}-not activated, not found;UserID:{1}", id, user.getId().toString()));
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
@@ -130,7 +130,7 @@ public class ClientController {
             logger.info(MessageFormat.format("C-ID:{0}-blocked;UserID:{1}", id, user.getId().toString()));
             return new ResponseEntity<>(new ClientDTO(client), HttpStatus.OK);
         }
-        logger.info(MessageFormat.format("C-ID:{0}-not blocked;UserID:{1}", id, user.getId().toString()));
+        logger.info(MessageFormat.format("C-ID:{0}-not blocked, not found;UserID:{1}", id, user.getId().toString()));
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

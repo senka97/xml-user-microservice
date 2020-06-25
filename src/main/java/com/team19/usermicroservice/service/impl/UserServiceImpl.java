@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
@@ -119,12 +120,14 @@ public class UserServiceImpl implements UserService {
             message.setEmail(user.getEmail());
 
             ResetPasswordToken resetPasswordToken = new ResetPasswordToken(UUID.randomUUID().toString(), user);
+            logger.info(MessageFormat.format("FP-created token;For userID:{0}", user.getId()));
             resetPasswordTokenRepository.save(resetPasswordToken);
 
             String link = "http://localhost:8080/reset-password?token=" + resetPasswordToken.getToken();
             message.setSubject("Resetting password");
             message.setContent("Hello. To reset your password you need to click on this link: " + link + " .For this action you have 24 hours.");
             producer.addRequestToMessageQueue("message-queue", message);
+            logger.info("FP-SMTQ;"); //FP forgot password, SMTQ sending message to queue
             return true;
         } else {
             return false;
@@ -135,7 +138,7 @@ public class UserServiceImpl implements UserService {
     public boolean resetPassword(ResetPasswordDTO resetPasswordDTO) {
         ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findByToken(resetPasswordDTO.getToken());
         try {
-            if (resetPasswordToken != null) {
+            if (resetPasswordToken != null && !resetPasswordToken.isUsed()) {
                 Calendar cal = Calendar.getInstance();
                 if ((resetPasswordToken.getExpiryDate().getTime() - cal.getTime().getTime()) >= 0) {
                     User user = resetPasswordToken.getUser();
@@ -146,12 +149,17 @@ public class UserServiceImpl implements UserService {
                         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
                         user.setPassword(bCryptPasswordEncoder.encode(resetPasswordDTO.getNewPassword()));
                         userRepository.save(user);
+                        resetPasswordToken.setUsed(true);
+                        resetPasswordTokenRepository.save(resetPasswordToken);
                         return true;
                     }
                 }
+                logger.warn(MessageFormat.format("Pass reset;token expired;For userID:{0}", resetPasswordToken.getUser().getId()));
             }
+            logger.warn("Pass reset;used token;");
         } catch (Exception e) {
-            System.out.println(e);
+            logger.error("Pass reset failed;");
+            e.printStackTrace();
         }
         return false;
     }
