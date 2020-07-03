@@ -150,9 +150,36 @@ public class ClientController {
         }
     }
 
-    @PutMapping(value = "/{id}/disable")
+    @PutMapping(value = "/{id}/comment/disable")
+    @PreAuthorize("hasAuthority('client_update')")
     public ResponseEntity<?> disableCreatingComment(@PathVariable Long id) {
         if (clientService.disableCreatingComment(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping(value = "/{id}")
+    @PreAuthorize("hasAuthority('request_update_cancel')")
+    public ResponseEntity<?> changeNumberForCanceledRequests(@PathVariable Long id) {
+        clientService.changeNumberForCanceledRequests(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/cart")
+    public boolean checkClientCanAddToCart(@PathVariable Long id) {
+        if (clientService.checkClientCanAddToCart(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @PutMapping(value = "/{id}/reservation/disable")
+    @PreAuthorize("hasAuthority('client_update')")
+    public ResponseEntity<?> disableCreatingReservations(@PathVariable Long id) {
+        if (clientService.disableCreatingReservations(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

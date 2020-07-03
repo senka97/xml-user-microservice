@@ -19,8 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -179,8 +177,8 @@ public class ClientServiceImpl implements ClientService {
         List<CommentDTO> rejectedComments = carClient.findAllRejectedComments(clientId, permissions, userID, token);
         Client client = clientRepository.getOne(clientId);
 
-        //ukoliko ima 3 odbijena komentara onda ne moze vise da komentarise ni jedan oglas
-        if (rejectedComments.size() == 3) {
+        //ukoliko ima 3 ili vise odbijenih komentara onda, ne moze vise da komentarise ni jedan oglas
+        if (rejectedComments.size() >= 3 && client.isCanComment()) {
             client.setCanComment(false);
             clientRepository.save(client);
             return true;
@@ -192,6 +190,34 @@ public class ClientServiceImpl implements ClientService {
     public boolean checkClientCanComment(Long id) {
         Client client = clientRepository.getOne(id);
         if(client.isCanComment()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void changeNumberForCanceledRequests(Long id) {
+        Client client = clientRepository.getOne(id);
+        int canceledRequest = client.getCanceledRequestNumber() + 1;
+        client.setCanceledRequestNumber(canceledRequest);
+        clientRepository.save(client);
+    }
+
+    @Override
+    public boolean disableCreatingReservations(Long clientId) {
+        Client client = clientRepository.getOne(clientId);
+        if (!checkClientCanAddToCart(clientId)) {
+            client.setCanAddToCart(false);
+            clientRepository.save(client);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkClientCanAddToCart(Long id) {
+        Client client = clientRepository.getOne(id);
+        if (client.getCanceledRequestNumber() < 3 && client.isCanAddToCart()) {
             return true;
         }
         return false;
