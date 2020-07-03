@@ -13,6 +13,8 @@ public class ClientDTO {
     private ClientStatus status;
     private boolean removed;
     private boolean canComment;
+    private int canceledRequestNumber;
+    private boolean canAddToCart;
 
     public ClientDTO() {
     }
@@ -26,6 +28,8 @@ public class ClientDTO {
         this.status = status;
         this.removed = false;
         this.canComment = true;
+        this.canceledRequestNumber = 0;
+        this.canAddToCart = true;
     }
 
     public ClientDTO(Client client) {
@@ -37,6 +41,8 @@ public class ClientDTO {
         this.status = client.getStatus();
         this.removed = client.isRemoved();
         this.canComment = client.isCanComment();
+        this.canceledRequestNumber = client.getCanceledRequestNumber();
+        this.canAddToCart = client.isCanAddToCart();
     }
 
     public Long getId() {
@@ -101,5 +107,21 @@ public class ClientDTO {
 
     public void setCanComment(boolean canComment) {
         this.canComment = canComment;
+    }
+
+    public int getCanceledRequestNumber() {
+        return canceledRequestNumber;
+    }
+
+    public void setCanceledRequestNumber(int canceledRequestNumber) {
+        this.canceledRequestNumber = canceledRequestNumber;
+    }
+
+    public boolean isCanAddToCart() {
+        return canAddToCart;
+    }
+
+    public void setCanAddToCart(boolean canAddToCart) {
+        this.canAddToCart = canAddToCart;
     }
 }

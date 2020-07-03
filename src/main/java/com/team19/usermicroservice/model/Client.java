@@ -23,6 +23,12 @@ public class Client extends User {
     @Column(name = "can_comment")
     private boolean canComment;
 
+    @Column(name = "canceled_request_number")
+    private int canceledRequestNumber;
+
+    @Column(name = "can_add_to_cart")
+    private boolean canAddToCart;
+
     public Client() {
 
     }
@@ -74,5 +80,21 @@ public class Client extends User {
 
     public void setCanComment(boolean canComment) {
         this.canComment = canComment;
+    }
+
+    public int getCanceledRequestNumber() {
+        return canceledRequestNumber;
+    }
+
+    public void setCanceledRequestNumber(int canceledRequestNumber) {
+        this.canceledRequestNumber = canceledRequestNumber;
+    }
+
+    public boolean isCanAddToCart() {
+        return canAddToCart;
+    }
+
+    public void setCanAddToCart(boolean canAddToCart) {
+        this.canAddToCart = canAddToCart;
     }
 }

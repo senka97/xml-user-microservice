@@ -17,5 +17,8 @@ public interface ClientService {
     Client findClient(Long id);
     boolean disableCreatingComment(Long clientId);
     boolean checkClientCanComment(Long id);
+    void changeNumberForCanceledRequests(Long id);
+    boolean disableCreatingReservations(Long clientId);
+    boolean checkClientCanAddToCart(Long id);
 
 }

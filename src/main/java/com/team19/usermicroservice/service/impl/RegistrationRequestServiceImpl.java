@@ -143,6 +143,8 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
                         client.setStatus(ClientStatus.ACTIVE);
                         client.setRemoved(false);
                         client.setCanComment(true);
+                        client.setCanceledRequestNumber(0);
+                        client.setCanAddToCart(true);
                         clientRepository.save(client);
                         return true;
                     }
