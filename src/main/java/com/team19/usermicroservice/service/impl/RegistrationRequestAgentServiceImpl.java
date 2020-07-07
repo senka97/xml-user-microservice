@@ -78,7 +78,7 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
             logger.info(MessageFormat.format("RRA-ID:{0}-approved,created token", id));
             verificationTokenAgentRepository.save(token);
 
-            String link = "https://localhost:8080/activate-account/agent?id=" + registrationRequestAgent.getId() + "&token=" + token.getToken();
+            String link = "http://localhost:8080/activate-account/agent?id=" + registrationRequestAgent.getId() + "&token=" + token.getToken();
             message.setContent("Hello. Admin approve your registration request. " +
                     "To activate your account you need to click on this link: " + link + " .For this action you have 24 hours.");
             producer.addRequestToRegistrationQueue("registration-approve-queue", message);
