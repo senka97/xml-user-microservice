@@ -80,7 +80,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
             logger.info(MessageFormat.format("RR-ID:{0}-approved,created token", id));
             verificationTokenClientRepository.save(verificationTokenClient);
 
-            String link = "https://localhost:8080/activate-account?id=" + registrationRequest.getId() + "&token=" + verificationTokenClient.getToken();
+            String link = "http://localhost:8080/activate-account?id=" + registrationRequest.getId() + "&token=" + verificationTokenClient.getToken();
             registrationMessage.setContent("Hello. Admin approve your registration request. " +
                     "To activate your account you need to click on this link: " + link + " .For this action you have 24 hours.");
             producer.addRequestToRegistrationQueue("registration-approve-queue", registrationMessage);

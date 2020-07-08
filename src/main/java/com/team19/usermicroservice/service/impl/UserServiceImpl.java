@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
             logger.info(MessageFormat.format("FP-created token;For userID:{0}", user.getId()));
             resetPasswordTokenRepository.save(resetPasswordToken);
 
-            String link = "https://localhost:8080/reset-password?token=" + resetPasswordToken.getToken();
+            String link = "http://localhost:8080/reset-password?token=" + resetPasswordToken.getToken();
             message.setSubject("Resetting password");
             message.setContent("Hello. To reset your password you need to click on this link: " + link + " .For this action you have 24 hours.");
             producer.addRequestToMessageQueue("message-queue", message);
