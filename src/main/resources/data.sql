@@ -85,6 +85,7 @@ insert into permission (name) values ('car_read');
 insert into permission (name) values ('car_update');
 
 insert into permission (name) values ('password_update');
+insert into permission (name) values ('check_client_can_add_to_cart');
 
 insert into role_permissions (role_id, permission_id) values (1, 1);
 insert into role_permissions (role_id, permission_id) values (2, 2);
@@ -194,6 +195,9 @@ insert into  role_permissions (role_id, permission_id) value (3, 62); --client c
 insert into role_permissions (role_id, permission_id) values (1, 63); --admin password update
 insert into role_permissions (role_id, permission_id) values (2, 63); --agent password update
 insert into role_permissions (role_id, permission_id) values (3, 63); --client password update
+
+insert into role_permissions (role_id, permission_id) values (1, 64);
+insert into role_permissions (role_id, permission_id) values (3, 64);
 
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('Admin', 'Admin', 'admin@gmail.com', '$2a$10$aMBAEXjwqcavdNT373EM7.hlk2MWp1SNYCZ5NWk/Dytyf/xPsI02a', true, 'ADMIN', 'ROLE_ADMIN', null, null, null, null, null, null);
 insert into user (name, surname, email, password, enabled, type, role, company_name, company_number, address, phone_number, published_ads_number, status) values ('Agent1', 'Agent', 'agent@gmail.com', '$2a$10$7YXN6idLLmf5Gy2K5guobOghxYVQBcc9a04fFmRd82ns12klLCmr.', true, 'AGENT', 'ROLE_AGENT', 'My company', '123456789', 'Alekse Santica 4', null, null, null);

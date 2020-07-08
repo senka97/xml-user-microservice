@@ -142,6 +142,7 @@ public class ClientController {
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasAuthority('comment_create')")
     public boolean checkClientCanComment(@PathVariable Long id) {
         if (clientService.checkClientCanComment(id)) {
             return true;
@@ -168,6 +169,7 @@ public class ClientController {
     }
 
     @GetMapping(value = "/{id}/cart")
+    @PreAuthorize("hasAuthority('check_client_can_add_to_cart')")
     public boolean checkClientCanAddToCart(@PathVariable Long id) {
         if (clientService.checkClientCanAddToCart(id)) {
             return true;
