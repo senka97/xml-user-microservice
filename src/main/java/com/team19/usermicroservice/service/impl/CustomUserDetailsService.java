@@ -5,6 +5,7 @@ import com.team19.usermicroservice.model.Role;
 import com.team19.usermicroservice.model.User;
 import com.team19.usermicroservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,9 +30,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-   /* @Autowired
+    @Lazy
+    @Autowired
     private AuthenticationManager authenticationManager;
-*/
+
     @Override
     public UserDetails loadUserByUsername(String email)  throws UsernameNotFoundException {
 
@@ -62,7 +64,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public void changePassword(String oldPassword, String newPassword) {
 
-       /* Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         String email = currentUser.getName();
 
         if (authenticationManager != null) {
@@ -78,7 +80,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         // secureRandom() is salt generator
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
         user.setPassword(bCryptPasswordEncoder.encode(newPassword));
-        userRepository.save(user);*/
+        userRepository.save(user);
 
     }
 
