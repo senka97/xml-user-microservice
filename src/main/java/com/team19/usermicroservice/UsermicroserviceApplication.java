@@ -18,7 +18,7 @@ public class UsermicroserviceApplication {
 		SpringApplication.run(UsermicroserviceApplication.class, args);
 	}
 
-	@Value("${host}")
+	/*@Value("${host}")
 	String host;
 
 	@Value("${registrationrejectqueue}")
@@ -43,16 +43,21 @@ public class UsermicroserviceApplication {
 	@Bean
 	Queue messageQueue() {
 		return new Queue(messageQueue, true);
-	}
+	}*/
 
 
 	@Bean
 	public ConnectionFactory connectionFactory() {
-		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host);
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+
+		connectionFactory.setHost("orangutan.rmq.cloudamqp.com ");
+		connectionFactory.setPassword("WDdTEeUjMPkUrV8ipbpbuSliBMJYVMi-");
+		connectionFactory.setUri("amqp://nzlqzoub:WDdTEeUjMPkUrV8ipbpbuSliBMJYVMi-@orangutan.rmq.cloudamqp.com/nzlqzoub");
+
 		return connectionFactory;
 	}
 
-	@Bean
+	/*@Bean
 	public RabbitAdmin  rabbitAdmin() {
 		RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory());
 		rabbitAdmin.afterPropertiesSet();
@@ -60,6 +65,6 @@ public class UsermicroserviceApplication {
 		rabbitAdmin.declareQueue(approveQueue());
 		rabbitAdmin.declareQueue(messageQueue());
 		return rabbitAdmin;
-	}
+	}*/
 
 }

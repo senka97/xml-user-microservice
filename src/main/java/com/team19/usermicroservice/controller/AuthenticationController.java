@@ -30,6 +30,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.regex.Pattern;
@@ -213,7 +216,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/forgot-password", consumes = "application/json")
-    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
         if (userServiceImpl.forgotPassword(forgotPasswordDTO)) {
             logger.info(MessageFormat.format("FP-Email:{0}-received;", forgotPasswordDTO.getEmail())); //FP-forgot password
             return new ResponseEntity<>(HttpStatus.OK);

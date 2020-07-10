@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -113,7 +116,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean forgotPassword(ForgotPasswordDTO forgotPasswordDTO) {
+    public boolean forgotPassword(ForgotPasswordDTO forgotPasswordDTO) throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
         User user = userRepository.findByEmail(forgotPasswordDTO.getEmail());
         if (user != null) {
             Message message = new Message();

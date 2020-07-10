@@ -15,11 +15,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeoutException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +69,7 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
     }
 
     @Override
-    public boolean approveRegistrationRequestAgent(Long id) {
+    public boolean approveRegistrationRequestAgent(Long id) throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         TokenBasedAuthentication tokenBasedAuthentication = (TokenBasedAuthentication) auth;
         User user = (User) tokenBasedAuthentication.getPrincipal();
@@ -91,7 +98,7 @@ public class RegistrationRequestAgentServiceImpl implements RegistrationRequestA
     }
 
     @Override
-    public boolean rejectRegistrationRequestAgent(Long id) {
+    public boolean rejectRegistrationRequestAgent(Long id) throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         TokenBasedAuthentication tokenBasedAuthentication = (TokenBasedAuthentication) auth;
         User user = (User) tokenBasedAuthentication.getPrincipal();
