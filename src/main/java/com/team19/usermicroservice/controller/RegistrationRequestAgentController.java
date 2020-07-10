@@ -16,9 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping(value = "/agent/request", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +55,7 @@ public class RegistrationRequestAgentController {
 
     @PutMapping(value = "/{id}/approve")
     @PreAuthorize("hasAuthority('registration_request_update')")
-    public ResponseEntity<?> approveRegistrationRequestAgent(@PathVariable Long id) {
+    public ResponseEntity<?> approveRegistrationRequestAgent(@PathVariable Long id) throws URISyntaxException, IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         TokenBasedAuthentication tokenBasedAuthentication = (TokenBasedAuthentication) auth;
         User user = (User) tokenBasedAuthentication.getPrincipal();
@@ -66,7 +71,7 @@ public class RegistrationRequestAgentController {
 
     @PutMapping(value = "/{id}/reject")
     @PreAuthorize("hasAuthority('registration_request_update')")
-    public ResponseEntity<?> rejectRegistrationRequestAgent(@PathVariable Long id) {
+    public ResponseEntity<?> rejectRegistrationRequestAgent(@PathVariable Long id) throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         TokenBasedAuthentication tokenBasedAuthentication = (TokenBasedAuthentication) auth;
         User user = (User) tokenBasedAuthentication.getPrincipal();
